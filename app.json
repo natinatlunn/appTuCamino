@@ -22,8 +22,18 @@
       },
       "edgeToEdgeEnabled": true
     },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Permisos para usar la cámara", 
+          "barcodeScannerEnabled": true
+        }
+      ]
+    ],
     "web": {
       "favicon": "./assets/favicon.png"
     }
   }
 }
+
