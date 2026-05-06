@@ -5,7 +5,7 @@ import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-nati
 
 export default function CameraScanner({ onClose }) {
   const [permission, requestPermission] = useCameraPermissions();
-  const [scanned, setScanned] = useState(false);
+  const [scanned, setScanned] = useState(false); //Para que solo se escanee un código QR 
 
   if (!permission) {
     return (
@@ -26,6 +26,7 @@ export default function CameraScanner({ onClose }) {
     );
   }
 
+  //Funcion que se ejecuta al escanear un código QR
   const handleBarcodeScanned = async ({ data }) => {
     if (scanned) {
       return;
@@ -47,8 +48,6 @@ export default function CameraScanner({ onClose }) {
 
       <View style={styles.overlay}>
         <Text style={styles.title}>Centra el código QR</Text>
-        <Text style={styles.subtitle}>Cuando se detecte, el dispositivo vibrará y se registrará el resultado.</Text>
-
         <Pressable
           style={styles.actionButton}
           onPress={() => {
