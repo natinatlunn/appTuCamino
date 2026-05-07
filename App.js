@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Camera } from 'expo-camera';
 
 import CameraScanner from './components/camera';
 
@@ -21,7 +22,13 @@ export default function App() {
       <Text style={styles.title}>Pantalla principal</Text>
       <Text style={styles.subtitle}>Pulsa el botón para abrir la cámara y escanear un código QR.</Text>
 
-      <Pressable style={styles.button} onPress={() => setScannerVisible(true)}>
+      <Pressable
+        style={styles.button}
+        onPress={async () => {
+          const res = await Camera.requestCameraPermissionsAsync();
+          if (res.granted) setScannerVisible(true);
+        }}
+      >
         <Text style={styles.buttonText}>Escanear codigo qr</Text>
       </Pressable>
 

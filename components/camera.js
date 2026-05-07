@@ -27,7 +27,7 @@ export default function CameraScanner({ onClose }) {
   }
 
   //Funcion que se ejecuta al escanear un código QR
-  const handleBarcodeScanned = async ({ data }) => {
+  const handleBarcodeScanned = async () => {
     if (scanned) {
       return;
     }
@@ -48,6 +48,8 @@ export default function CameraScanner({ onClose }) {
 
       <View style={styles.overlay}>
         <Text style={styles.title}>Centra el código QR</Text>
+        <Text>{scanned && <Text style={styles.message}>El codigo QR se ha escaneado.</Text>}</Text>
+
         <Pressable
           style={styles.actionButton}
           onPress={() => {
