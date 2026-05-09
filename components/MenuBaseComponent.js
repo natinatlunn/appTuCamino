@@ -8,13 +8,17 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import CameraScanner from "./camera";
 import { colorHeader } from "../comun/comun";
+import Mapa from "./MapaComponent";
+import Home from "./HomeComponent";
 
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
 
 class MenuBase extends Component {
   menuHeaderOptions = (tite) => ({
-    headerStyle: { backgroundColor: colorHeader },
+    headerStyle: {
+      backgroundColor: colorHeader,
+    },
     headerTintColor: "#000",
     headerTitleStyle: { fontWeight: "bold", fontSize: 22 },
     headerTitleAlign: "center",
@@ -35,7 +39,7 @@ class MenuBase extends Component {
         initialRouteName="Tu Camino"
         screenOptions={() => this.menuHeaderOptions()}
       >
-        <Stack.Screen name="Tu Camino" component={CameraScanner} />
+        <Stack.Screen name="Tu Camino" component={Home} />
       </Stack.Navigator>
     );
   };
@@ -46,7 +50,7 @@ class MenuBase extends Component {
         initialRouteName="Mapa"
         screenOptions={() => this.menuHeaderOptions()}
       >
-        <Stack.Screen name="Mapa" component={CameraScanner} />
+        <Stack.Screen name="Mapa" component={Mapa} />
       </Stack.Navigator>
     );
   };
