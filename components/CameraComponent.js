@@ -2,10 +2,13 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as Haptics from 'expo-haptics';
 import { useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import InfoQrComponent from './InfoQrComponent';
 
 export default function CameraScanner({ onClose }) {
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false); //Para que solo se escanee un código QR 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [qrData, setQrData] = useState(null);
 
   if (!permission) {
     return (
@@ -27,14 +30,23 @@ export default function CameraScanner({ onClose }) {
   }
 
   //Funcion que se ejecuta al escanear un código QR
-  const handleBarcodeScanned = async () => {
+  const handleBarcodeScanned = async ({ data }) => {
     if (scanned) {
       return;
     }
 
     setScanned(true);
     await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    setQrData(data);
+    setModalVisible(true);
     console.log('QR escaneado:', data);
+  };
+
+  //Función para cerrar el modal
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setQrData(null);
+    setScanned(false); // Permite escanear otro código QR
   };
 
   return (
@@ -48,7 +60,6 @@ export default function CameraScanner({ onClose }) {
 
       <View style={styles.overlay}>
         <Text style={styles.title}>Centra el código QR</Text>
-        <Text>{scanned && <Text style={styles.message}>El codigo QR se ha escaneado.</Text>}</Text>
 
         <Pressable
           style={styles.actionButton}
@@ -60,6 +71,13 @@ export default function CameraScanner({ onClose }) {
           <Text style={styles.actionText}>Cerrar cámara</Text>
         </Pressable>
       </View>
+
+      {/* Modal con información del QR */}
+      <InfoQrComponent 
+        visible={modalVisible}
+        qrData={qrData}
+        onClose={handleCloseModal}
+      />
     </View>
   );
 }
