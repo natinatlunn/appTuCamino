@@ -17,7 +17,6 @@ export default function InfoQrComponent({ visible, qrData, onClose }) {
             <Text style={styles.infoText}>{qrData}</Text>
           </View>
 
-          {/* Botón para cerrar */}
           <Pressable
             style={styles.closeModalButton}
             onPress={onClose}

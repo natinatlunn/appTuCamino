@@ -1,11 +1,18 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { rutas } from "./rutas";
+import { rutasReducer } from "./reducers/rutasReducer";
+import { userReducer } from "./reducers/userReducer";
+import { comentariosReducer } from "./reducers/comentariosReducer";
+import { scannerReducer } from "./reducers/scannerReducer";
 
 export const ConfigureStore = () => {
   const store = configureStore({
     reducer: {
-      rutas: rutas,
+      rutas: rutasReducer,
+      user: userReducer,
+      comentarios: comentariosReducer,
+      scanner: scannerReducer,
     },
   });
+
   return store;
 };
