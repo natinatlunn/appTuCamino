@@ -10,11 +10,21 @@ import CameraScanner from "./CameraComponent";
 import { colorHeader } from "../comun/comun";
 import Mapa from "./MapaComponent";
 import Home from "./HomeComponent";
+import { connect } from "react-redux";
+import { fetchRutas } from "../redux/ActionCreators";
 
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
 
+const mapDispatchToProps = (dispatch) => ({
+  fetchRutas: () => dispatch(fetchRutas()),
+});
+
 class MenuBase extends Component {
+  componentDidMount() {
+    this.props.fetchRutas();
+  }
+
   menuHeaderOptions = (tite) => ({
     headerStyle: {
       backgroundColor: colorHeader,
@@ -150,4 +160,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MenuBase;
+export default connect(null, mapDispatchToProps)(MenuBase);

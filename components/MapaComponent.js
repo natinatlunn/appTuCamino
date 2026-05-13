@@ -1,24 +1,27 @@
 import { Component } from "react";
-import MapView, { PROVIDER_GOOGLE, Polyline, Marker } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Polyline } from "react-native-maps";
 import { View, StyleSheet, Dimensions } from "react-native";
 import caminoData from "../data_provisional/viaDeLaPlata.json";
+import { connect } from "react-redux";
+
+const mapStateToProps = (state) => {
+  return {
+    rutas: state.rutas,
+  };
+};
 
 class Mapa extends Component {
-  constructor(props) {
-    super(props);
-    const rawCoords = caminoData.features[0].geometry.coordinates;
-    const formattedCoords = rawCoords.map((punto) => ({
+  formatearCoordenadas(rutas) {
+    if (!rutas || rutas.length === 0) return [];
+
+    return rutas[0].viaDeLaPlata[0].coordinates.map((punto) => ({
       latitude: punto[1],
       longitude: punto[0],
     }));
-
-    this.state = {
-      routeCoords: formattedCoords,
-    };
   }
 
   render() {
-    const { routeCoords } = this.state;
+    const routeCoords = this.formatearCoordenadas(this.props.rutas.rutas);
 
     return (
       <View style={styles.container}>
@@ -32,11 +35,13 @@ class Mapa extends Component {
             longitudeDelta: 5,
           }}
         >
-          <Polyline
-            coordinates={routeCoords}
-            strokeColor="#005293"
-            strokeWidth={4}
-          />
+          {routeCoords.length > 0 && (
+            <Polyline
+              coordinates={routeCoords}
+              strokeColor="#005293"
+              strokeWidth={4}
+            />
+          )}
         </MapView>
       </View>
     );
@@ -53,4 +58,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Mapa;
+export default connect(mapStateToProps)(Mapa);
