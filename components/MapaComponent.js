@@ -1,7 +1,7 @@
 import { Component } from "react";
 import MapView, { PROVIDER_GOOGLE, Polyline, Marker } from "react-native-maps";
 import { View, StyleSheet, Dimensions } from "react-native";
-import caminoData from "../data_provisional/caminoFrances.json";
+import caminoData from "../data_provisional/viaDeLaPlata.json";
 
 class Mapa extends Component {
   constructor(props) {
