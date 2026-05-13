@@ -6,7 +6,7 @@ import { View, Image, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import CameraScanner from "./camera";
+import CameraScanner from "./CameraComponent";
 import { colorHeader } from "../comun/comun";
 import Mapa from "./MapaComponent";
 import Home from "./HomeComponent";

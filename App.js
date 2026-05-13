@@ -2,7 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Camera } from "expo-camera";
-import CameraScanner from "./components/camera";
+import CameraScanner from "./components/CameraComponent";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import MenuBase from "./components/MenuBaseComponent";
 
