@@ -8,9 +8,9 @@ export const ConfigureStore = () => {
   const store = configureStore({
     reducer: {
       rutas: rutasReducer,
-      user: userReducer,
-      comentarios: comentariosReducer,
-      scanner: scannerReducer,
+      // user: userReducer,
+      // comentarios: comentariosReducer,
+      // scanner: scannerReducer,
     },
   });
 
