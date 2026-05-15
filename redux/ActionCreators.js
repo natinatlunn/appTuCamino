@@ -34,3 +34,18 @@ export const addRutas = (rutas) => ({
   type: ActionTypes.ADD_RUTAS,
   payload: rutas,
 });
+
+export const setScanned = (value) => ({
+  type: ActionTypes.SET_SCANNED,
+  payload: value,
+});
+
+export const setModalVisible = (value) => ({
+  type: ActionTypes.SET_MODAL_VISIBLE,
+  payload: value,
+});
+
+export const setQrData = (data) => ({
+  type: ActionTypes.SET_QR_DATA,
+  payload: data,
+});

@@ -10,7 +10,7 @@ export const ConfigureStore = () => {
       rutas: rutasReducer,
       // user: userReducer,
       // comentarios: comentariosReducer,
-      // scanner: scannerReducer,
+      scanner: scannerReducer,
     },
   });
 
