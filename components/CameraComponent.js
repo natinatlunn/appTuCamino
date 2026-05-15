@@ -1,14 +1,16 @@
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as Haptics from 'expo-haptics';
-import { useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import InfoQrComponent from './InfoQrComponent';
+import { useDispatch, useSelector } from 'react-redux';
+import { setScanned, setModalVisible, setQrData } from '../redux/ActionCreators';
 
 export default function CameraScanner({ onClose }) {
+  const dispatch = useDispatch();
+  const scanned = useSelector((state) => state.scanner.scanned);
+  const modalVisible = useSelector((state) => state.scanner.modalVisible);
+  const qrData = useSelector((state) => state.scanner.qrData);
   const [permission, requestPermission] = useCameraPermissions();
-  const [scanned, setScanned] = useState(false); //Para que solo se escanee un código QR 
-  const [modalVisible, setModalVisible] = useState(false);
-  const [qrData, setQrData] = useState(null);
 
   if (!permission) {
     return (
@@ -35,18 +37,18 @@ export default function CameraScanner({ onClose }) {
       return;
     }
 
-    setScanned(true);
+    dispatch(setScanned(true));
     await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    setQrData(data);
-    setModalVisible(true);
+    dispatch(setQrData(data));
+    dispatch(setModalVisible(true));
     console.log('QR escaneado:', data);
   };
 
   //Función para cerrar el modal
   const handleCloseModal = () => {
-    setModalVisible(false);
-    setQrData(null);
-    setScanned(false); // Permite escanear otro código QR
+    dispatch(setModalVisible(false));
+    dispatch(setQrData(null));
+    dispatch(setScanned(false)); // Permite escanear otro código QR
   };
 
   return (
@@ -64,7 +66,7 @@ export default function CameraScanner({ onClose }) {
         <Pressable
           style={styles.actionButton}
           onPress={() => {
-            setScanned(false);
+            dispatch(setScanned(false));
             onClose?.();
           }}
         >
