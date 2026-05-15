@@ -1,0 +1,185 @@
+{
+  "ruta": "Camino de Santiago Francés",
+  "puntos_caracteristicos": [
+    {
+      "id": 1,
+      "nombre": "Gran Albergue de Peregrinos de Roncesvalles",
+      "tipo": "Albergue",
+      "subtipo": "Municipal / Parroquial (A pie de ruta)",
+      "coordenadas": {
+        "latitud": 43.01035024122622,
+        "longitud": -1.3191300251978288
+      },
+      "direccion": "Calle Ntra. Sra. de Roncesvalles, 10, 31650 Roncesvalles, Navarra",
+      "descripcion": "Punto de inicio icónico en España. El albergue se encuentra integrado en el propio conjunto hospitalario medieval por donde pasa la senda."
+    },
+    {
+      "id": 2,
+      "nombre": "Monumento al Peregrino (Alto del Perdón)",
+      "tipo": "Interés Turístico",
+      "subtipo": "Mirador / Escultura",
+      "coordenadas": {
+        "latitud": 42.73586930971131,
+        "longitud": -1.7426499724451971
+      },
+      "direccion": "Alto del Perdón, 31190 Zariquiegui, Navarra",
+      "descripcion": "Famoso conjunto escultórico de hierro que representa a peregrinos de distintas épocas combatiendo el viento."
+    },
+    {
+      "id": 3,
+      "nombre": "Puente Románico de Puente la Reina",
+      "tipo": "Interés Turístico",
+      "subtipo": "Monumento Histórico",
+      "coordenadas": {
+        "latitud": 42.670173584025726,
+        "longitud": -1.8180449874667846
+      },
+      "direccion": "Paseo la Grana, 31100 Puente la Reina, Navarra",
+      "descripcion": "Puente del siglo XI donde se unen las dos grandes vertientes pirenaicas: el camino de Roncesvalles y el Aragonés."
+    },
+    {
+      "id": 4,
+      "nombre": "Café Iruña",
+      "tipo": "Restaurante",
+      "subtipo": "Café Histórico / Menú del Día (Pamplona)",
+      "coordenadas": {
+        "latitud": 42.817604207599594,
+        "longitud": -1.6433238259446434
+      },
+      "direccion": "Plaza del Castillo, 44, 31001 Pamplona, Navarra",
+      "descripcion": "Fundado en 1888 y famoso por ser el rincón favorito de Ernest Hemingway. Está en pleno corazón de Pamplona, a escasos metros de la ruta peatonal del Camino, ideal para disfrutar de un menú tradicional en su espectacular salón de época."
+    },
+    {
+      "id": 5,
+      "nombre": "Fuente del Vino de las Bodegas Irache",
+      "tipo": "Interés Turístico",
+      "subtipo": "Zona de Avituallamiento",
+      "coordenadas": {
+        "latitud": 42.65087918934357,
+        "longitud": -2.043629452694027
+      },
+      "direccion": "Camino de Santiago, 91A, 31240 Ayegui, Navarra",
+      "descripcion": "Famosa fuente con dos caños gratuitos instalada por las bodegas locales: uno ofrece agua fresca y el otro vino."
+    },
+    {
+      "id": 6,
+      "nombre": "Albergue Parroquial San Juan Bautista de Grañón",
+      "tipo": "Albergue",
+      "subtipo": "Parroquial / Donativo (En la ruta)",
+      "coordenadas": {
+        "latitud": 42.450466602634954,
+        "longitud": -3.0269754509244433
+      },
+      "direccion": "Calle Mayor, s/n (Junto a la Iglesia), 26259 Grañón, La Rioja",
+      "descripcion": "Situado sobre la misma Calle Mayor por la que transcurre el Camino. Es uno de los albergues con mayor tradición hospitalaria y cena comunitaria."
+    },
+    {
+      "id": 7,
+      "nombre": "Mesón Egüés",
+      "tipo": "Restaurante",
+      "subtipo": "Especialidad en Carnes y Vino Rioja",
+      "coordenadas": {
+        "latitud": 42.46678013801482,
+        "longitud": -2.457331586419972
+      },
+      "direccion": "C. la Campa, 3, 26005 Logroño, La Rioja",
+      "descripcion": "Parada gastronómica clave en La Rioja para disfrutar de menús castellanos tradicionales y excelentes vinos de la región."
+    },
+    {
+      "id": 8,
+      "nombre": "Albergue Municipal de Peregrinos de Burgos",
+      "tipo": "Albergue",
+      "subtipo": "Municipal Urbano (Lado Catedral)",
+      "coordenadas": {
+        "latitud": 42.34251019568529,
+        "longitud": -3.7038095779111124
+      },
+      "direccion": "Calle de Fernán González, 28, 09003 Burgos",
+      "descripcion": "Se encuentra exactamente en la calle peatonal que los peregrinos recorren para cruzar el casco histórico de Burgos, justo detrás de la Catedral."
+    },
+    {
+      "id": 9,
+      "nombre": "Albergue de San Nicolás de Puente Fitero",
+      "tipo": "Albergue",
+      "subtipo": "Histórico / Confraternita (Pie de Camino)",
+      "coordenadas": {
+        "latitud": 42.279059981766174,
+        "longitud": -4.2432304914044465
+      },
+      "direccion": "BU-403, 7, 09107 Itero del Castillo, Burgos",
+      "descripcion": "Ubicado exactamente junto al puente románico que cruza el río Pisuerga. El trazado del camino pasa por la puerta de esta antigua ermita."
+    },
+    {
+      "id": 10,
+      "nombre": "Real Monasterio de San Zoilo",
+      "tipo": "Interés Turístico",
+      "subtipo": "Monumento / Hotel Histórico",
+      "coordenadas": {
+        "latitud": 42.340884972361366,
+        "longitud": -4.611102064417778
+      },
+      "direccion": "C. San Zoilo, 23, 34120 Carrión de los Condes, Palencia",
+      "descripcion": "Monasterio de origen románico con un espectacular claustro plateresco, centro político y religioso de gran relevancia en la meseta."
+    },
+    {
+      "id": 11,
+      "nombre": "Catedral de León (Pulchra Leonina)",
+      "tipo": "Interés Turístico",
+      "subtipo": "Monumento / Punto Cultural",
+      "coordenadas": {
+        "latitud": 42.5996080967929,
+        "longitud": -5.567157835582222
+      },
+      "direccion": "Plaza de Regla, s/n, 24003 León",
+      "descripcion": "Joyel del gótico español célebre por sus impresionantes vitrales medievales que llenan de luz polícroma el interior."
+    },
+    {
+      "id": 12,
+      "nombre": "Restaurante La Pepa",
+      "tipo": "Restaurante",
+      "subtipo": "Cocina de Mercado / Tapas (Astorga)",
+      "coordenadas": {
+        "latitud": 42.45551956056245,
+        "longitud": -6.056085146964382
+      },
+      "direccion": "C. del Arzobispo López Peláez, N° 6, 24700 Astorga, León",
+      "descripcion": "Ubicado a unos pasos de la muralla histórica en el casco antiguo de Astorga. Es un rincón excelente y muy cercano a la ruta del Camino, ideal para disfrutar de raciones caseras, tapas elaboradas y un ambiente acogedor."
+    },
+    {
+      "id": 13,
+      "nombre": "Castillo de los Templarios de Ponferrada",
+      "tipo": "Interés Turístico",
+      "subtipo": "Fortaleza Histórica",
+      "coordenadas": {
+        "latitud": 42.543482817158726,
+        "longitud": -6.593770649075557
+      },
+      "direccion": "Calle Gil y Carrasco, 1, 24401 Ponferrada, León",
+      "descripcion": "Imponente fortaleza medieval construida y ampliada por los caballeros templarios con el fin de proteger a los peregrinos."
+    },
+    {
+      "id": 14,
+      "nombre": "Albergue de Peregrinos de O Cebreiro",
+      "tipo": "Albergue",
+      "subtipo": "Público de la Xunta (En el Camino)",
+      "coordenadas": {
+        "latitud": 42.70791984995808,
+        "longitud": -7.045977449075557
+      },
+      "direccion": "Lugar Cebreiro, 17, 27671 Pedrafita do Cebreiro, Lugo",
+      "descripcion": "Localizado en la cima de la montaña, al finalizar la mítica subida. Los peregrinos entran al pueblo y topan directamente con este complejo gallego."
+    },
+    {
+      "id": 15,
+      "nombre": "Pulpería Ezequiel",
+      "tipo": "Restaurante",
+      "subtipo": "Especialidad Pulpo a la Gallega",
+      "coordenadas": {
+        "latitud": 42.91354885062316,
+        "longitud": -8.012511835582222
+      },
+      "direccion": "Rúa Cantón San Roque, 48, 15800 Melide, A Coruña",
+      "descripcion": "Parada culinaria mítica y casi obligatoria a pocos kilómetros de Santiago para degustar el auténtico pulpo á feira en grandes mesas comunales."
+    }
+  ]
+}
