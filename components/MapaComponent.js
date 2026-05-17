@@ -2,7 +2,7 @@ import { Component } from "react";
 import MapView, { PROVIDER_GOOGLE, Polyline, Marker } from "react-native-maps";
 import { View, StyleSheet, Dimensions } from "react-native";
 import { connect } from "react-redux";
-import datosCamino from "../data_provisional/puntos.json";
+import datosCamino from "../data_provisional/puntosCaracteristicos/puntosCaminoNorte.json";
 
 const mapStateToProps = (state) => {
   return {
@@ -41,7 +41,7 @@ class Mapa extends Component {
   formatearCoordenadas(rutas) {
     if (!rutas || rutas.length === 0) return [];
 
-    return rutas[0].caminoFrances[0].coordinates.map((punto) => ({
+    return rutas[0].caminoDelNorte[0].coordinates.map((punto) => ({
       latitude: punto[1],
       longitude: punto[0],
     }));

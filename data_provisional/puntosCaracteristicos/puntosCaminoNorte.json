@@ -1,0 +1,185 @@
+{
+  "ruta": "Camino de Santiago del Norte",
+  "puntos_caracteristicos": [
+    {
+      "id": 1,
+      "nombre": "Albergue del Convento de San Francisco",
+      "tipo": "Albergue",
+      "subtipo": "Histórico / Inicial (Km 0)",
+      "coordenadas": {
+        "latitud": 43.34543845004098,
+        "longitud": -1.8004323644177767
+      },
+      "direccion": "Lesaca Kalea, 1, 20301 Irun, Gipuzkoa",
+      "descripcion": "Punto de partida oficial en la frontera con Francia. Ubicado en un antiguo convento justo donde se inicia la señalización de la ruta costera."
+    },
+    {
+      "id": 2,
+      "nombre": "Restaurante Kirkilla Enea",
+      "tipo": "Restaurante",
+      "subtipo": "Cocina Vasca / Menú Peregrino",
+      "coordenadas": {
+        "latitud": 43.28549311560165,
+        "longitud": -2.1771309202400015
+      },
+      "direccion": "Calle Santa Marina, 12, 20800 Zarautz, Guipúzcoa",
+      "descripcion": "Estratégica parada gastronómica en la costa guipuzcoana. Ofrece cocina tradicional vasca de alta calidad a pocos metros de la senda."
+    },
+    {
+      "id": 3,
+      "nombre": "Albergue Monasterio de Zenarruza",
+      "tipo": "Albergue",
+      "subtipo": "Monástico / Hospitalidad Antigua",
+      "coordenadas": {
+        "latitud": 43.24857195837993,
+        "longitud": -2.5624588780140494
+      },
+      "direccion": "Barrio Zenarruza, 3, 48278 Ziortza-Bolibar, Vizcaya",
+      "descripcion": "Un oasis medieval aislado en la montaña vizcaína. El Camino cruza el propio complejo del monasterio, donde los monjes acogen a los caminantes."
+    },
+    {
+      "id": 4,
+      "nombre": "Puente Colgante de Vizcaya (Portugalete)",
+      "tipo": "Interés Turístico",
+      "subtipo": "Monumento / Patrimonio de la Humanidad",
+      "coordenadas": {
+        "latitud": 43.32339328963794,
+        "longitud": -3.017152314479199
+      },
+      "direccion": "Puente de Vizcaya Zubia, 48930 Areeta / Las Arenas, Bizkaia",
+      "descripcion": "Impresionante estructura de hierro de 1893. Los peregrinos lo cruzan de manera obligatoria en la barquilla colgante para avanzar hacia Cantabria."
+    },
+    {
+      "id": 5,
+      "nombre": "Albergue de Peregrinos de Castro Urdiales",
+      "tipo": "Albergue",
+      "subtipo": "Municipal (Pie de Camino)",
+      "coordenadas": {
+        "latitud": 43.388471434272105,
+        "longitud": -3.2310093134917617
+      },
+      "direccion": "Subida Campijo, 2041, 39700 Castro-Urdiales, Cantabria",
+      "descripcion": "Ubicado en la misma subida de salida de la primera gran villa cántabra, garantizando un descanso inmediato tras bordear los acantilados."
+    },
+    {
+      "id": 6,
+      "nombre": "Mesón Marinos",
+      "tipo": "Restaurante",
+      "subtipo": "Taberna Marinera / Raciones y Tapas",
+      "coordenadas": {
+        "latitud": 43.445854166529706,
+        "longitud": -3.455015844177295
+      },
+      "direccion": "C. Marinos de Santoña, 6, 39740 Santoña, Cantabria",
+      "descripcion": "Un mesón marinero de toda la vida situado al lado del puerto pesquero. Es el lugar ideal en el Camino para hacer una parada rápida y reponer fuerzas con sus raciones de rabas, pulpo o las indispensables anchoas de Santoña en un ambiente auténtico."
+    },
+    {
+      "id": 7,
+      "nombre": "El Capricho de Gaudí",
+      "tipo": "Interés Turístico",
+      "subtipo": "Monumento Artístico / Histórico",
+      "coordenadas": {
+        "latitud": 43.383848543861106,
+        "longitud": -4.2927742730164775
+      },
+      "direccion": "Barrio Sobrellano, s/n, 39520 Comillas, Cantabria",
+      "descripcion": "Joyel del modernismo catalán fuera de Cataluña. El trazado oficial del norte pasa a escasos metros de su verja de entrada."
+    },
+    {
+      "id": 8,
+      "nombre": "Albergue de Peregrinos de Llanes",
+      "tipo": "Albergue",
+      "subtipo": "Municipal (Oriente Asturiano)",
+      "coordenadas": {
+        "latitud": 43.4219307147515,
+        "longitud": -4.756855145227967
+      },
+      "direccion": "C. Colegio la Encarnacion, 3, 33500 Llanes, Asturias",
+      "descripcion": "Fijado estratégicamente en la entrada de este icónico pueblo marinero asturiano, sirviendo de base al concluir las etapas costeras de Oriente."
+    },
+    {
+      "id": 9,
+      "nombre": "Sidrería El Planeta",
+      "tipo": "Restaurante",
+      "subtipo": "Sidrería Tradicional / Cocina Asturiana",
+      "coordenadas": {
+        "latitud": 43.547482648616224,
+        "longitud": -5.665823126983523
+      },
+      "direccion": "Tránsito de las Ballenas, 4, 33201 Gijón, Asturias",
+      "descripcion": "Ubicada en el barrio histórico de Cimavilla (centro neurálgico de Asturias). Perfecta para degustar sidra natural escanciada y pescados locales."
+    },
+    {
+      "id": 10,
+      "nombre": "Casina San Martín",
+      "tipo": "Albergue",
+      "subtipo": "Parroquial / Rural (Tramo Central)",
+      "coordenadas": {
+        "latitud": 43.570224693763556,
+        "longitud": -5.970022255819602
+      },
+      "direccion": "C. del Cementerio, 39, 33450 San Martin de Laspra, Asturias",
+      "descripcion": "Un punto de pernocta muy tranquilo en el corazón geográfico de Asturias, ubicado en un entorno rural al lado de la senda oficial."
+    },
+    {
+      "id": 11,
+      "nombre": "Albergue de Peregrinos de Almuña",
+      "tipo": "Albergue",
+      "subtipo": "Municipal (Occidente Asturiano)",
+      "coordenadas": {
+        "latitud": 43.53261368958946,
+        "longitud": -6.521978986162215
+      },
+      "direccion": "Cam. de la Capilla, 33787 Aldin, Asturias",
+      "descripcion": "Instalado de forma equidistante en el tramo occidental asturiano, ideal para descansar antes de afrontar las últimas etapas hacia la frontera gallega."
+    },
+    {
+      "id": 12,
+      "nombre": "Albergue de peregrinos de Ribadeo",
+      "tipo": "Albergue",
+      "subtipo": "Público (Entrada a Galicia)",
+      "coordenadas": {
+        "latitud": 43.544329773886645,
+        "longitud": -7.03743874602482
+      },
+      "direccion": "Estrada do Faro, 12, 27710 Ribadeo, Lugo",
+      "descripcion": "Primer punto de acogida en Galicia tras cruzar a pie el Puente de los Santos sobre la ría del Eo, uniendo Asturias con Lugo."
+    },
+    {
+      "id": 13,
+      "nombre": "Catedral de Mondoñedo",
+      "tipo": "Interés Turístico",
+      "subtipo": "Monumento Histórico / Interior de Lugo",
+      "coordenadas": {
+        "latitud": 43.428318429150806,
+        "longitud": -7.362680813489367
+      },
+      "direccion": "Plaza de la Catedral, s/n, 27740 Mondoñedo, Lugo",
+      "descripcion": "Impresionante catedral arrodillada en un valle interior. El trazado peatonal cruza la plaza del monumento de forma obligatoria."
+    },
+    {
+      "id": 14,
+      "nombre": "Monasterio de Santa María de Sobrado",
+      "tipo": "Albergue",
+      "subtipo": "Histórico / Monástico (La Coruña)",
+      "coordenadas": {
+        "latitud": 43.03919360186752,
+        "longitud": -8.023220828833887
+      },
+      "direccion": "Praza Portal, 15813 A Porta, A Coruña",
+      "descripcion": "Espectacular monasterio del siglo X donde los monjes trapenses gestionan el albergue de peregrinos dentro del propio monumento histórico."
+    },
+    {
+      "id": 15,
+      "nombre": "Restaurante O Ceadoiro",
+      "tipo": "Restaurante",
+      "subtipo": "Cocina Casera / Famoso por su Tortilla (Gontán)",
+      "coordenadas": {
+        "latitud": 42.91538507631239,
+        "longitud": -8.32309562698089
+      },
+      "direccion": "San Miguel de Cerceda, 18, Santa Irene, O Pino, 15821 O Pino, A Coruña",
+      "descripcion": "Situado a pie del Camino del Norte a su paso por Gontán (Abadín). Es una parada legendaria entre los caminantes para recuperar fuerzas gracias a su espectacular tortilla de patatas, sus raciones abundantes de comida casera y un trato inmejorable al peregrino."
+    }
+  ]
+}
