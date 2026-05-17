@@ -2,7 +2,9 @@ import { Component } from "react";
 import MapView, { PROVIDER_GOOGLE, Polyline, Marker } from "react-native-maps";
 import { View, StyleSheet, Dimensions } from "react-native";
 import { connect } from "react-redux";
+import Icon from "@expo/vector-icons/FontAwesome5";
 import datosCamino from "../data_provisional/puntosCaracteristicos/puntosCaminoNorte.json";
+import { colorHeader } from "../comun/comun";
 
 const mapStateToProps = (state) => {
   return {
@@ -14,27 +16,23 @@ class Mapa extends Component {
   constructor(props) {
     super(props);
 
-    // Inicializamos el estado para controlar el punto seleccionado en el mapa
     this.state = {
       puntoSeleccionado: null,
     };
 
-    // Vinculamos el método para no perder el contexto de 'this'
-    this.getMarkerColor = this.getMarkerColor.bind(this);
+    this.getMarkerIcon = this.getMarkerIcon.bind(this);
   }
 
-  getMarkerColor(tipo) {
+  getMarkerIcon(tipo) {
     switch (tipo) {
       case "Albergue":
-        return "#3498db"; // Azul
-      case "Monumento":
-        return "#e74c3c"; // Rojo
-      case "Interés Turístico":
-        return "#9b59b6"; // Morado
-      case "Localidad de Interés":
-        return "#2ecc71"; // Verde
+        return "bed";
+      case "Restaurante":
+        return "utensils";
+      case "Interés Turístico" || "Monumento":
+        return "landmark";
       default:
-        return "#7f8c8d"; // Gris
+        return "info-circle";
     }
   }
 
@@ -64,11 +62,7 @@ class Mapa extends Component {
           }}
         >
           {routeCoords.length > 0 && (
-            <Polyline
-              coordinates={routeCoords}
-              strokeColor="#005293"
-              strokeWidth={4}
-            />
+            <Polyline coordinates={routeCoords} strokeWidth={4} />
           )}
           {datosCamino.puntos_caracteristicos.map((punto) => (
             <Marker
@@ -79,10 +73,16 @@ class Mapa extends Component {
               }}
               title={punto.nombre}
               description={punto.subtipo}
-              pinColor={this.getMarkerColor(punto.tipo)}
-              // Al pulsar en el globo de información, se guarda el punto en el estado
               onCalloutPress={() => this.setState({ puntoSeleccionado: punto })}
-            />
+            >
+              <View style={styles.customMarker}>
+                <Icon
+                  name={this.getMarkerIcon(punto.tipo)}
+                  size={14}
+                  color="#111111"
+                />
+              </View>
+            </Marker>
           ))}
         </MapView>
       </View>
@@ -97,6 +97,21 @@ const styles = StyleSheet.create({
   map: {
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
+  },
+  customMarker: {
+    backgroundColor: "#ffffff",
+    borderWidth: 1.5,
+    borderColor: colorHeader,
+    borderRadius: 15,
+    width: 28,
+    height: 28,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
 
