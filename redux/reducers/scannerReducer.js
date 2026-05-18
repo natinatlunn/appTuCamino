@@ -20,3 +20,7 @@ export const scannerReducer = (state = initialState, action) => {
       return { ...state, qrData: action.payload, loading: false, error: null };
     case ActionTypes.FETCH_QR_INFO_FAILED:
       return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};

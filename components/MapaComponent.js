@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import Icon from "@expo/vector-icons/FontAwesome5";
-import datosCamino from "../data_provisional/puntosCaracteristicos/puntosCaminoIngles.json";
+import datosCamino from "../data_provisional/puntosCaracteristicos/puntosCaminoFrances.json";
 import { colorHeader } from "../comun/comun";
 
 const mapStateToProps = (state) => {
