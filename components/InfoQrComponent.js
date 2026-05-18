@@ -16,18 +16,18 @@ export default function InfoQrComponent({ visible, qrData, onClose }) {
           <Text style={styles.modalTitle}>Código QR Escaneado</Text>
           <View style={styles.infoBox}>
             <Text style={styles.infoLabel}>Código:</Text>
-            <Text style={styles.infoText}>{info.id ?? 'Sin código'}</Text>
+            <Text style={styles.infoText}>{String(info.id ?? 'Sin código')}</Text>
 
             <Text style={styles.infoLabel}>Nombre:</Text>
-            <Text style={styles.infoText}>{info.nombre ?? 'Sin nombre'}</Text>
+            <Text style={styles.infoText}>{String(info.titulo ?? 'Sin nombre')}</Text>
 
             <Text style={styles.infoLabel}>Descripción:</Text>
-            <Text style={styles.infoText}>{info.descripcion ?? 'Sin descripción'}</Text>
+            <Text style={styles.infoText}>{String(info.info ?? 'Sin descripción')}</Text>
 
             {info.tipo ? (
               <>
                 <Text style={styles.infoLabel}>Tipo:</Text>
-                <Text style={styles.infoText}>{info.tipo}</Text>
+                <Text style={styles.infoText}>{String(info.tipo)}</Text>
               </>
             ) : null}
           </View>

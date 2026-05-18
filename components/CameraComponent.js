@@ -76,7 +76,7 @@ export default function CameraScanner({ onClose }) {
         </Pressable>
       </View>
 
-      {/* Modal con información del QR */}
+      //Modal con información del QR 
       <InfoQrComponent 
         visible={modalVisible}
         qrData={qrData}

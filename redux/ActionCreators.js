@@ -55,6 +55,7 @@ export const fetchQRInfo = (qrCode) => async (dispatch) => {
   try {
     const { getQRInfo } = await import('../comun/firebaseConfig');
     const qrInfo = await getQRInfo(qrCode);
+    console.log("QR Info recibida en ActionCreator:", qrInfo);
     
     if (qrInfo) {
       dispatch(setQrData(qrInfo));
@@ -63,6 +64,7 @@ export const fetchQRInfo = (qrCode) => async (dispatch) => {
       dispatch(fetchQRInfoFailed('QR no encontrado en la base de datos'));
     }
   } catch (error) {
+    console.error("Error en fetchQRInfo:", error);
     dispatch(fetchQRInfoFailed(error.message));
   }
 };

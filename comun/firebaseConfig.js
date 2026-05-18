@@ -23,7 +23,10 @@ export const getQRInfo = async (qrCode) => {
     const snapshot = await get(qrRef);
     
     if (snapshot.exists()) {
-      return snapshot.val();
+      const data = snapshot.val();
+      console.log("Datos del QR desde Firebase:", data);
+      console.log("Estructura de datos:", JSON.stringify(data, null, 2));
+      return data;
     } else {
       console.log("QR no encontrado en la base de datos");
       return null;
