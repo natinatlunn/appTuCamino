@@ -3,7 +3,7 @@ import * as Haptics from 'expo-haptics';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import InfoQrComponent from './InfoQrComponent';
 import { useDispatch, useSelector } from 'react-redux';
-import { setScanned, setModalVisible, setQrData } from '../redux/ActionCreators';
+import { setScanned, setModalVisible, setQrData, fetchQRInfo } from '../redux/ActionCreators';
 
 export default function CameraScanner({ onClose }) {
   const dispatch = useDispatch();
@@ -39,7 +39,9 @@ export default function CameraScanner({ onClose }) {
 
     dispatch(setScanned(true));
     await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    dispatch(setQrData(data));
+    
+    // Obtener información del QR desde Firebase
+    dispatch(fetchQRInfo(data));
     dispatch(setModalVisible(true));
     console.log('QR escaneado:', data);
   };

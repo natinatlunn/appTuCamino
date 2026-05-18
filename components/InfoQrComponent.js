@@ -1,6 +1,8 @@
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 export default function InfoQrComponent({ visible, qrData, onClose }) {
+  const info = qrData ?? {};
+
   return (
     <Modal
       animationType="fade"
@@ -13,8 +15,21 @@ export default function InfoQrComponent({ visible, qrData, onClose }) {
         
           <Text style={styles.modalTitle}>Código QR Escaneado</Text>
           <View style={styles.infoBox}>
-            <Text style={styles.infoLabel}>Información:</Text>
-            <Text style={styles.infoText}>{qrData}</Text>
+            <Text style={styles.infoLabel}>Código:</Text>
+            <Text style={styles.infoText}>{info.id ?? 'Sin código'}</Text>
+
+            <Text style={styles.infoLabel}>Nombre:</Text>
+            <Text style={styles.infoText}>{info.nombre ?? 'Sin nombre'}</Text>
+
+            <Text style={styles.infoLabel}>Descripción:</Text>
+            <Text style={styles.infoText}>{info.descripcion ?? 'Sin descripción'}</Text>
+
+            {info.tipo ? (
+              <>
+                <Text style={styles.infoLabel}>Tipo:</Text>
+                <Text style={styles.infoText}>{info.tipo}</Text>
+              </>
+            ) : null}
           </View>
 
           <Pressable
