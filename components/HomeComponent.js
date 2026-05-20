@@ -17,13 +17,13 @@ function TarjetaBienvenida() {
   return (
     <View style={styles.bienvenidaCard}>
       <Image
-        source={require("../assets/icon.png")}
+        source={require("../components/imagenes/imagBienvenida.png")}
         style={styles.bienvenidaImage}
         resizeMode="contain"
       />
       <Text style={styles.bienvenidaTitle}>Tu Camino</Text>
       <Text style={styles.bienvenidaText}>
-        Elige una ruta del Camino de Santiago y muéstrala en el mapa.
+        Elige una ruta del Camino de Santiago y se mostrará en el mapa.
       </Text>
     </View>
   );
