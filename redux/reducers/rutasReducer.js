@@ -1,9 +1,15 @@
 import * as ActionTypes from "../ActionTypes";
 
-export const rutasReducer = (state = { errMess: null, rutas: [] }, action) => {
+export const rutasReducer = (
+  state = { errMess: null, rutas: [], rutaSeleccionada: null },
+  action,
+) => {
   switch (action.type) {
     case ActionTypes.ADD_RUTAS:
       return { ...state, errMess: null, rutas: action.payload };
+
+    case ActionTypes.SET_RUTA_SELECCIONADA:
+      return { ...state, rutaSeleccionada: action.payload };
 
     case ActionTypes.RUTAS_FAILED:
       return { ...state, errMess: action.payload };

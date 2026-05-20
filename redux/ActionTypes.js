@@ -1,5 +1,6 @@
 export const RUTAS_LOADING = "RUTAS_LOADING";
 export const ADD_RUTAS = "ADD_RUTAS";
+export const SET_RUTA_SELECCIONADA = "SET_RUTA_SELECCIONADA";
 export const RUTAS_FAILED = "RUTAS_FAILED";
 export const SET_SCANNED = "SET_SCANNED";
 export const SET_MODAL_VISIBLE = "SET_MODAL_VISIBLE";

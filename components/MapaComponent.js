@@ -159,16 +159,29 @@ class Mapa extends Component {
     this.cerrarPopup();
   }
 
-  formatearCoordenadas(rutas) {
+  formatearCoordenadas(rutas, rutaSeleccionada) {
+    if (rutaSeleccionada?.coordinates?.length) {
+      return rutaSeleccionada.coordinates.map((punto) => ({
+        latitude: punto[1],
+        longitude: punto[0],
+      }));
+    }
+
     if (!rutas || rutas.length === 0) return [];
-    return rutas[0].caminoIngles[0].coordinates.map((punto) => ({
+
+    const primeraRuta = Object.values(rutas[0])[0]?.[0]?.coordinates || [];
+
+    return primeraRuta.map((punto) => ({
       latitude: punto[1],
       longitude: punto[0],
     }));
   }
 
   render() {
-    const routeCoords = this.formatearCoordenadas(this.props.rutas.rutas);
+    const routeCoords = this.formatearCoordenadas(
+      this.props.rutas.rutas,
+      this.props.rutas.rutaSeleccionada,
+    );
     const idPuntoSeleccionado = this.state.puntoSeleccionado
       ? this.state.puntoSeleccionado.id
       : null;

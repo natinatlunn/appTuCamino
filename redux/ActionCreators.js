@@ -35,6 +35,11 @@ export const addRutas = (rutas) => ({
   payload: rutas,
 });
 
+export const setRutaSeleccionada = (ruta) => ({
+  type: ActionTypes.SET_RUTA_SELECCIONADA,
+  payload: ruta,
+});
+
 export const setScanned = (value) => ({
   type: ActionTypes.SET_SCANNED,
   payload: value,
