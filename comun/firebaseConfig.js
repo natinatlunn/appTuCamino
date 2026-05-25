@@ -1,4 +1,7 @@
 import { initializeApp } from 'firebase/app';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import { getDatabase, ref, get } from 'firebase/database';
 
 const firebaseConfig = {
@@ -14,6 +17,17 @@ const firebaseConfig = {
 //Conecta la app a firebase
 const app = initializeApp(firebaseConfig);
 
+let auth;
+
+try {
+  auth = initializeAuth(app, {
+    persistence: getReactNativePersistence(AsyncStorage),
+  });
+} catch (error) {
+  auth = getAuth(app);
+}
+
+export { auth };
 export const database = getDatabase(app);
 
 //Funcion para obtener información del QR desde firebase
