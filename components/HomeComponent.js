@@ -12,8 +12,10 @@ import { connect } from "react-redux";
 import Icon from "@expo/vector-icons/FontAwesome5";
 import { colorHeader, obtenerRutasNormalizadas } from "../comun/comun";
 import { setRutaSeleccionada } from "../redux/ActionCreators";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../comun/firebaseConfig";
 
-function TarjetaBienvenida() {
+function TarjetaBienvenida({ user }) {
   return (
     <View style={styles.bienvenidaCard}>
       <Image
@@ -22,6 +24,11 @@ function TarjetaBienvenida() {
         resizeMode="contain"
       />
       <Text style={styles.bienvenidaTitle}>Tu Camino</Text>
+      {user && (
+        <Text style={styles.welcomeUser}>
+          {`Bienvenido ${user.displayName || (user.email || "").split("@")[0]}`}
+        </Text>
+      )}
       <Text style={styles.bienvenidaText}>
         Elige una ruta del Camino de Santiago y se mostrará en el mapa.
       </Text>
@@ -58,9 +65,22 @@ class Home extends Component {
     super(props);
 
     this.state = {
+      user: null,
       rutaModalVisible: false,
       rutaSeleccionada: null,
     };
+  }
+
+  componentDidMount() {
+    this.unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
+      this.setState({ user: currentUser });
+    });
+  }
+
+  componentWillUnmount() {
+    if (this.unsubscribeAuth) {
+      this.unsubscribeAuth();
+    }
   }
 
   rutasDisponibles() {
@@ -94,7 +114,7 @@ class Home extends Component {
         <FlatList
           data={rutas}
           keyExtractor={(item) => item.key}
-          ListHeaderComponent={<TarjetaBienvenida />}
+          ListHeaderComponent={<TarjetaBienvenida user={this.state.user} />}
           contentContainerStyle={styles.listContent}
           renderItem={({ item }) => (
             <TarjetaRuta ruta={item} onPress={() => this.abrirModal(item)} />
@@ -172,6 +192,12 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     color: "#1f1a14",
     marginBottom: 8,
+  },
+  welcomeUser: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#6b6258",
+    marginBottom: 6,
   },
   bienvenidaText: {
     textAlign: "center",
