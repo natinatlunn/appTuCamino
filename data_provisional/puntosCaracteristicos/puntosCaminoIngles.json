@@ -1,0 +1,113 @@
+{
+  "ruta": "Camino de Santiago Inglés",
+  "puntos_caracteristicos": [
+    {
+      "id": 1,
+      "nombre": "Muelle de Curuxeiras",
+      "tipo": "Interés Turístico",
+      "subtipo": "Zona Histórica",
+      "coordenadas": {
+        "latitud": 43.4789331614919,
+        "longitud": -8.244535589400982
+      },
+      "direccion": "Paseo de la Marina, s/n, 15401 Ferrol, A Coruña",
+      "descripcion": "El kilómetro cero oficial de la ruta. Antiguo puerto pesquero donde desembarcaban los peregrinos del norte de Europa para iniciar su viaje a pie."
+    },
+    {
+      "id": 2,
+      "nombre": "Albergue de Peregrinos de Neda",
+      "tipo": "Albergue",
+      "subtipo": "Municipal",
+      "coordenadas": {
+        "latitud": 43.51426427839935,
+        "longitud": -8.152167520057773
+      },
+      "direccion": "15510 Neda, A Coruña",
+      "descripcion": "Ubicado en un entorno tranquilo junto a la desembocadura del río Belelle. Es el primer punto de descanso oficial tras bordear la ría de Ferrol."
+    },
+    {
+      "id": 3,
+      "nombre": "Albergue de Peregrinos de Pontedeume",
+      "tipo": "Albergue",
+      "subtipo": "Municipal",
+      "coordenadas": {
+        "latitud": 43.40840404993496,
+        "longitud": -8.172573075779127
+      },
+      "direccion": "Rúa Peirao, 15600 Pontedeume, A Coruña",
+      "descripcion": "Situado en el antiguo almacén de sal de la villa (siglo XVII), justo al cruzar el imponente puente de piedra de entrada al casco histórico."
+    },
+    {
+      "id": 4,
+      "nombre": "Restaurante Casa Miranda",
+      "tipo": "Restaurante",
+      "subtipo": "Especialidad en Tortilla de Betanzos",
+      "coordenadas": {
+        "latitud": 43.27979049620687,
+        "longitud": -8.21001745148586
+      },
+      "direccion": "Tr.ª Progreso, 5, 15300 Betanzos, A Coruña",
+      "descripcion": "Un local legendario e imprescindible en el casco histórico de Betanzos. Es mundialmente famoso por su espectacular tortilla al estilo local (jugosa y poco cuajada). Una parada obligatoria para cumplir con el ritual gastronómico del Camino Inglés."
+    },
+    {
+      "id": 5,
+      "nombre": "Mesón-Museo Xente no Camiño",
+      "tipo": "Restaurante",
+      "subtipo": "Mesón Tradicional / Espacio Cultural",
+      "coordenadas": {
+        "latitud": 43.20105897951224,
+        "longitud": -8.266182215931739
+      },
+      "direccion": "Lugar Campo de Ntra. Sra. de la Saleta, 30, 15318 Abegondo, A Coruña",
+      "descripcion": "Ubicado en Presedo, a mitad de la exigente etapa entre Betanzos y Bruma. Es un mesón-museo único, gestionado por un artista local, lleno de esculturas y maquetas medievales. Una parada mítica para comer cocina casera."
+    },
+    {
+      "id": 6,
+      "nombre": "Albergue de Peregrinos de Hospital de Bruma",
+      "tipo": "Albergue",
+      "subtipo": "Público de la Xunta",
+      "coordenadas": {
+        "latitud": 43.15124803731926,
+        "longitud": -8.364149179549024
+      },
+      "direccion": "Lugar de Hospital de Bruma, s/n, 15685 Mesía, A Coruña",
+      "descripcion": "Ubicado en una aldea rural en el punto más alto del camino. Ocupa el lugar de un antiguo hospital de peregrinos medieval fundado en el siglo XII."
+    },
+    {
+      "id": 7,
+      "nombre": "Café Bar O Cruceiro",
+      "tipo": "Restaurante",
+      "subtipo": "Café Bar",
+      "coordenadas": {
+        "latitud": 43.059260526208924,
+        "longitud": -8.38048708359545
+      },
+      "direccion": "Calle, 28, 15687 A Calle, A Coruña",
+      "descripcion": "Un punto de encuentro mítico y de parada obligada para los peregrinos en la aldea tradicional de A Calle. Es el sitio perfecto a pie de Camino para tomar un café, un bocadillo, descansar en su terraza y sellar la credencial a mitad de camino hacia Sigüeiro."
+    },
+    {
+      "id": 8,
+      "nombre": "Pulpería Mesón As Rías",
+      "tipo": "Restaurante",
+      "subtipo": "Pulpería / Cocina Casera",
+      "coordenadas": {
+        "latitud": 42.96578162422984,
+        "longitud": -8.444221495885914
+      },
+      "direccion": "Rúa Toxeira, 1, 15888 Sigüeiro, A Coruña",
+      "descripcion": "Un establecimiento muy popular y con gran ambiente en el centro de Sigüeiro. Es ideal para los peregrinos que terminan la etapa o quieren realizar una parada contundente para disfrutar de un buen pulpo a la gallega, raciones tradicionales y carnes antes de encarar el último tramo hacia Santiago."
+    },
+    {
+      "id": 9,
+      "nombre": "Catedral de Santiago de Compostela",
+      "tipo": "Interés Turístico",
+      "subtipo": "Monumento Histórico",
+      "coordenadas": {
+        "latitud": 42.880695971845235,
+        "longitud": -8.54439387482379
+      },
+      "direccion": "Praza do Obradoiro, s/n, 15704 Santiago de Compostela, A Coruña",
+      "descripcion": "Punto final del Camino de Santiago. Los peregrinos del Camino Inglés entran a la plaza monumental por el acceso norte (Porta do Camiño)."
+    }
+  ]
+}

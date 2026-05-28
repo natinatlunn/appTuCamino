@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import Icon from "@expo/vector-icons/FontAwesome5";
-import datosCamino from "../data_provisional/puntosCaracteristicos/puntosCaminoFrances.json";
+import datosCamino from "../data_provisional/puntosCaracteristicos/puntosCaminoFisterraMuxia.json";
 import { colorHeader } from "../comun/comun";
 
 const mapStateToProps = (state) => {
@@ -128,6 +128,10 @@ class Mapa extends Component {
       case "Interés Turístico":
       case "Monumento":
         return "landmark";
+      case "Fuente":
+        return "tint";
+      case "Playa":
+        return "umbrella-beach";
       default:
         return "info-circle";
     }

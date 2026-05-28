@@ -1,0 +1,160 @@
+{
+  "ruta": "Camino Fisterra y Muxía",
+  "puntos_caracteristicos": [
+    {
+      "id": 1,
+      "nombre": "Faro de Fisterra",
+      "tipo": "Interés Turístico",
+      "subtipo": "Faro / Fin del Mundo",
+      "coordenadas": {
+        "latitud": 42.88240465629297,
+        "longitud": -9.271878169927428
+      },
+      "direccion": "Cabo Fisterra, s/n, 15155 Fisterra, A Coruña",
+      "descripcion": "Uno de los lugares más simbólicos del Camino de Santiago. Durante siglos fue considerado el fin del mundo conocido y es famoso por sus espectaculares atardeceres sobre el Atlántico."
+    },
+    {
+      "id": 2,
+      "nombre": "Fonte Cabanas",
+      "tipo": "Fuente",
+      "coordenadas": {
+        "latitud": 42.89345717035624,
+        "longitud": -9.267745353877785
+      },
+      "direccion": "AC-445, 68, 15155 Fisterra, A Coruña",
+      "descripcion": "Fuente tradicional junto al Camino de Santiago en la zona de Cabanas, usada por peregrinos para descansar y recargar agua."
+    },
+    {
+      "id": 3,
+      "nombre": "Albergue Aresolis",
+      "tipo": "Albergue",
+      "coordenadas": {
+        "latitud": 42.905427272898294,
+        "longitud": -9.26266694773652
+      },
+      "direccion": "Rúa Ara-Solís, 3, 15155 Fisterra, A Coruña",
+      "descripcion": "Albergue para peregrinos en el centro de Fisterra, cercano al puerto y al Camino de Santiago."
+    },
+    {
+      "id": 4,
+      "nombre": "Ponte de Vaosilveiro",
+      "tipo": "Interés Turístico",
+      "coordenadas": {
+        "latitud": 43.00182462656651,
+        "longitud": -9.24210796442722
+      },
+      "direccion": "Lugar Vaosilveiro, 1, 15124 Muxía, A Coruña",
+      "descripcion": "Puente tradicional de piedra rodeado de bosque y paisaje rural gallego."
+    },
+    {
+      "id": 5,
+      "nombre": "Fuente del Cruceiro",
+      "tipo": "Fuente",
+      "coordenadas": {
+        "latitud": 43.04507458518876,
+        "longitud": -9.232721374497553
+      },
+      "direccion": "15124 Morquintián, A Coruña",
+      "descripcion": "Fuente tradicional situada cerca del cruceiro."
+    },
+    {
+      "id": 6,
+      "nombre": "Fuente de Bico",
+      "tipo": "Fuente",
+      "coordenadas": {
+        "latitud": 43.08238395943348,
+        "longitud": -9.214282483681535
+      },
+      "direccion": "L3QJP+P7, 15125 Xurarantes, A Coruña",
+      "descripcion": "Fuente tradicional situada en el lugar de Bico, utilizada por peregrinos para descansar y recargar agua."
+    },
+    {
+      "id": 7,
+      "nombre": "Cala de Arliña",
+      "tipo": "Playa",
+      "coordenadas": {
+        "latitud": 43.090554444088276,
+        "longitud": -9.22024994971042
+      },
+      "direccion": "Rúa do Mar, 15124 Muxía, A Coruña",
+      "descripcion": "Pequeña cala de la Costa da Morte con entorno natural y aguas atlánticas"
+    },
+    {
+      "id": 8,
+      "nombre": "Albergue Bela Muxia",
+      "tipo": "Albergue",
+      "coordenadas": {
+        "latitud": 43.10700399147762,
+        "longitud": -9.217626637026882
+      },
+      "direccion": "Rúa Encarnación, 30, 15124 Muxía, A Coruña",
+      "descripcion": "Albergue moderno en Muxía con ambiente acogedor"
+    },
+    {
+      "id": 9,
+      "nombre": "Praia de Espiñeirido",
+      "tipo": "Playa",
+      "coordenadas": {
+        "latitud": 43.10040011515065,
+        "longitud": -9.208778118401863
+      },
+      "direccion": "15125 Mugía, La Coruña",
+      "descripcion": "Playa tranquila y natural cerca de Muxía, de arena y entorno atlántico"
+    },
+    {
+      "id": 10,
+      "nombre": "Albergue de Dumbria",
+      "tipo": "Albergue",
+      "coordenadas": {
+        "latitud": 43.005002781174746,
+        "longitud": -9.112152749716584
+      },
+      "direccion": "junto al campo de fútbol, 15151 Dumbría, A Coruña",
+      "descripcion": "Albergue de peregrinos en Dumbría, situado en el Camino de Fisterra-Muxía, con servicios básicos para descanso y pernocta."
+    },
+    {
+      "id": 11,
+      "nombre": "Restaurante O Rueiro",
+      "tipo": "Restaurante",
+      "coordenadas": {
+        "latitud": 42.94363605739072,
+        "longitud": -8.849634985382485
+      },
+      "direccion": "Vilaserio, 28, 15838 Vilaserío, A Coruña",
+      "descripcion": "Restaurante de cocina tradicional gallega situado en Vilavella (Cee), cerca del Camino de Fisterra-Muxía, conocido por sus menús caseros y ambiente familiar para peregrinos."
+    },
+    {
+      "id": 12,
+      "nombre": "Pazo do Cotón",
+      "tipo": "Monumento",
+      "coordenadas": {
+        "latitud": 42.90754457129542,
+        "longitud": -8.73865594248906
+      },
+      "direccion": "Carreira de San Mauro, 37, 15830 Negreira, A Coruña",
+      "descripcion": "Conjunto histórico de Negreira con origen medieval y reformado en época barroca, situado junto al río Barcala"
+    },
+    {
+      "id": 13,
+      "nombre": "Meson Alto Do Vento",
+      "tipo": "Restaurante",
+      "coordenadas": {
+        "latitud": 42.88097274103757,
+        "longitud": -8.624317110969706
+      },
+      "direccion": "Lugar Alto do Vento, 1, 15229 Ames, A Coruña",
+      "descripcion": "Mesón de cocina tradicional gallega situado en el Camino de Fisterra-Muxía, conocido por sus platos caseros y atención a peregrinos"
+    },
+    {
+      "id": 14,
+      "nombre": "Casa Manola",
+      "tipo": "Albergue",
+      "coordenadas": {
+        "latitud": 42.96676465412181,
+        "longitud": -9.037794544856753
+      },
+      "direccion": "Lugar de Olveiroa, 24, 15151, A Coruña",
+      "descripcion": "Casa de comidas y alojamiento en Olveiroa, muy popular entre peregrinos del Camino de Fisterra-Muxía por su ambiente familiar y cocina casera"
+    }
+  ]
+}
