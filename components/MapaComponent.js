@@ -173,7 +173,7 @@ class Mapa extends Component {
   }
 
   render() {
-    const idRuta = this.props.route.params.rutaId;
+    const idRuta = this.props.route.params?.rutaId;
     const rutaSeleccionada = this.props.rutas.rutas[idRuta];
     const rutaCoordenadas = this.formatearCoordenadas(rutaSeleccionada);
 
@@ -200,7 +200,7 @@ class Mapa extends Component {
             />
           )}
 
-          {rutaSeleccionada.puntosCaracteristicos?.map((punto) => (
+          {rutaSeleccionada?.puntosCaracteristicos?.map((punto) => (
             <RenderPuntoCaracteristico
               key={punto.id}
               idPuntoSeleccionado={idPuntoSeleccionado}
