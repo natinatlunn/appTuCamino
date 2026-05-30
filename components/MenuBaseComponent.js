@@ -12,18 +12,26 @@ import Mapa from "./MapaComponent";
 import Home from "./HomeComponent";
 import Perfil from "./PerfilComponent";
 import { connect } from "react-redux";
-import { fetchRutas } from "../redux/ActionCreators";
+import { fetchRutas, startAuthListener } from "../redux/ActionCreators";
 
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
 
 const mapDispatchToProps = (dispatch) => ({
   fetchRutas: () => dispatch(fetchRutas()),
+  startAuthListener: () => dispatch(startAuthListener()),
 });
 
 class MenuBase extends Component {
   componentDidMount() {
     this.props.fetchRutas();
+    this.unsubscribeAuth = this.props.startAuthListener();
+  }
+
+  componentWillUnmount() {
+    if (this.unsubscribeAuth) {
+      this.unsubscribeAuth();
+    }
   }
 
   menuHeaderOptions = (tite) => ({

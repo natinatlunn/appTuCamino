@@ -9,42 +9,22 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { colorHeader } from "../comun/comun";
 import { auth } from "../comun/firebaseConfig";
+import { connect } from "react-redux";
 
 class Perfil extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      user: null,
-      loading: true,
       email: "",
       password: "",
       submitting: false,
       message: "",
     };
-  }
-
-  componentDidMount() {
-    this.unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
-      this.setState({
-        user: currentUser,
-        loading: false,
-      });
-
-      if (currentUser) {
-        this.setState({ email: "", password: "", message: "" });
-      }
-    });
-  }
-
-  componentWillUnmount() {
-    if (this.unsubscribeAuth) {
-      this.unsubscribeAuth();
-    }
   }
 
   handleLogin = async () => {
@@ -89,8 +69,8 @@ class Perfil extends Component {
   };
 
   render() {
-    const { user, loading } = this.state;
     const { email, password, submitting, message } = this.state;
+    const { user, loading } = this.props.auth;
 
     if (loading) {
       return (
@@ -139,9 +119,7 @@ class Perfil extends Component {
             <MaterialCommunityIcons name="account-lock" size={34} color="#ffffff" />
           </View>
           <Text style={styles.title}>Iniciar sesión</Text>
-          <Text style={styles.subtitle}>
-            Accede con la cuenta registrada en Firebase para continuar.
-          </Text>
+          
         </View>
 
         <View style={styles.formCard}>
@@ -287,4 +265,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Perfil;
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps)(Perfil);

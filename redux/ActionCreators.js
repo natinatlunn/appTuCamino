@@ -1,5 +1,7 @@
 import * as ActionTypes from "./ActionTypes";
 import { baseUrl } from "../comun/comun";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../comun/firebaseConfig";
 
 export const fetchRutas = () => (dispatch) => {
   return fetch(baseUrl + "rutas.json")
@@ -54,6 +56,25 @@ export const setQrData = (data) => ({
   type: ActionTypes.SET_QR_DATA,
   payload: data,
 });
+
+export const setAuthUser = (user) => ({
+  type: ActionTypes.SET_AUTH_USER,
+  payload: user,
+});
+
+export const setAuthLoading = (loading) => ({
+  type: ActionTypes.SET_AUTH_LOADING,
+  payload: loading,
+});
+
+export const startAuthListener = () => (dispatch) => {
+  dispatch(setAuthLoading(true));
+
+  return onAuthStateChanged(auth, (currentUser) => {
+    dispatch(setAuthUser(currentUser));
+    dispatch(setAuthLoading(false));
+  });
+};
 
 // Acción para cargar QR info desde Firebase
 export const fetchQRInfo = (qrCode) => async (dispatch) => {
