@@ -11,8 +11,6 @@ import { connect } from "react-redux";
 import Icon from "@expo/vector-icons/FontAwesome5";
 import { colorHeader, obtenerRutasNormalizadas } from "../comun/comun";
 import { setRutaSeleccionada } from "../redux/ActionCreators";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../comun/firebaseConfig";
 
 function TarjetaBienvenida({ user }) {
   return (
@@ -53,6 +51,7 @@ function TarjetaRuta({ ruta, onPress }) {
 
 const mapStateToProps = (state) => ({
   rutas: state.rutas,
+  auth: state.auth,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -60,26 +59,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      user: null,
-    };
-  }
-
-  componentDidMount() {
-    this.unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
-      this.setState({ user: currentUser });
-    });
-  }
-
-  componentWillUnmount() {
-    if (this.unsubscribeAuth) {
-      this.unsubscribeAuth();
-    }
-  }
-
   rutasDisponibles() {
     return obtenerRutasNormalizadas(this.props.rutas?.rutas || []);
   }
@@ -102,13 +81,14 @@ class Home extends Component {
 
   render() {
     const rutas = this.rutasDisponibles();
+    const user = this.props.auth?.user;
 
     return (
       <View style={styles.container}>
         <FlatList
           data={rutas}
           keyExtractor={(item) => item.key}
-          ListHeaderComponent={<TarjetaBienvenida user={this.state.user} />}
+          ListHeaderComponent={<TarjetaBienvenida user={user} />}
           contentContainerStyle={styles.listContent}
           renderItem={({ item }) => (
             <TarjetaRuta ruta={item} onPress={() => this.seleccionarYRendirRuta(item)} />
