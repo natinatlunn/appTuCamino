@@ -1,15 +1,20 @@
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as Haptics from 'expo-haptics';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import { connect } from 'react-redux';
 import InfoQrComponent from './InfoQrComponent';
-import { useDispatch, useSelector } from 'react-redux';
-import { setScanned, setModalVisible, setQrData, fetchQRInfo } from '../redux/ActionCreators';
+import { fetchQRInfo, setModalVisible, setQrData, setScanned } from '../redux/ActionCreators';
 
-export default function CameraScanner({ onClose }) {
-  const dispatch = useDispatch();
-  const scanned = useSelector((state) => state.scanner.scanned);
-  const modalVisible = useSelector((state) => state.scanner.modalVisible);
-  const qrData = useSelector((state) => state.scanner.qrData);
+function CameraScanner({
+  onClose,
+  scanned,
+  modalVisible,
+  qrData,
+  setScanned,
+  setModalVisible,
+  setQrData,
+  fetchQRInfo,
+}) {
   const [permission, requestPermission] = useCameraPermissions();
 
   if (!permission) {
@@ -31,26 +36,23 @@ export default function CameraScanner({ onClose }) {
     );
   }
 
-  //Funcion que se ejecuta al escanear un código QR
   const handleBarcodeScanned = async ({ data }) => {
     if (scanned) {
       return;
     }
 
-    dispatch(setScanned(true));
+    setScanned(true);
     await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    
-    // Obtener información del QR desde Firebase
-    dispatch(fetchQRInfo(data));
-    dispatch(setModalVisible(true));
+
+    fetchQRInfo(data);
+    setModalVisible(true);
     console.log('QR escaneado:', data);
   };
 
-  //Función para cerrar el modal
   const handleCloseModal = () => {
-    dispatch(setModalVisible(false));
-    dispatch(setQrData(null));
-    dispatch(setScanned(false)); // Permite escanear otro código QR
+    setModalVisible(false);
+    setQrData(null);
+    setScanned(false);
   };
 
   return (
@@ -68,7 +70,7 @@ export default function CameraScanner({ onClose }) {
         <Pressable
           style={styles.actionButton}
           onPress={() => {
-            dispatch(setScanned(false));
+            setScanned(false);
             onClose?.();
           }}
         >
@@ -76,7 +78,7 @@ export default function CameraScanner({ onClose }) {
         </Pressable>
       </View>
 
-      <InfoQrComponent 
+      <InfoQrComponent
         visible={modalVisible}
         qrData={qrData}
         onClose={handleCloseModal}
@@ -84,6 +86,19 @@ export default function CameraScanner({ onClose }) {
     </View>
   );
 }
+
+const mapStateToProps = (state) => ({
+  scanned: state.scanner.scanned,
+  modalVisible: state.scanner.modalVisible,
+  qrData: state.scanner.qrData,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  setScanned: (value) => dispatch(setScanned(value)),
+  setModalVisible: (value) => dispatch(setModalVisible(value)),
+  setQrData: (data) => dispatch(setQrData(data)),
+  fetchQRInfo: (qrCode) => dispatch(fetchQRInfo(qrCode)),
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -138,3 +153,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+
+export default connect(mapStateToProps, mapDispatchToProps)(CameraScanner);

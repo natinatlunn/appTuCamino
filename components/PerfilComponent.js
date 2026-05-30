@@ -35,7 +35,7 @@ class Perfil extends Component {
 
     try {
       const credential = await signInWithEmailAndPassword(auth, email.trim(), password);
-      this.props.dispatch(setAuthUser(mapFirebaseUser(credential.user)));
+      this.props.setAuthUser(mapFirebaseUser(credential.user));
       this.setState({
         email: "",
         password: "",
@@ -56,7 +56,7 @@ class Perfil extends Component {
 
     try {
       await signOut(auth);
-      this.props.dispatch(setAuthUser(null));
+      this.props.setAuthUser(null);
       this.setState({
         email: "",
         password: "",
@@ -272,4 +272,8 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps)(Perfil);
+const mapDispatchToProps = {
+  setAuthUser,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Perfil);
