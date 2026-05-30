@@ -5,7 +5,6 @@
       "id": 1,
       "nombre": "Albergue del Convento de San Francisco",
       "tipo": "Albergue",
-      "subtipo": "Histórico / Inicial (Km 0)",
       "coordenadas": {
         "latitud": 43.34543845004098,
         "longitud": -1.8004323644177767
@@ -17,7 +16,6 @@
       "id": 2,
       "nombre": "Restaurante Kirkilla Enea",
       "tipo": "Restaurante",
-      "subtipo": "Cocina Vasca / Menú Peregrino",
       "coordenadas": {
         "latitud": 43.28549311560165,
         "longitud": -2.1771309202400015
@@ -29,7 +27,6 @@
       "id": 3,
       "nombre": "Albergue Monasterio de Zenarruza",
       "tipo": "Albergue",
-      "subtipo": "Monástico / Hospitalidad Antigua",
       "coordenadas": {
         "latitud": 43.24857195837993,
         "longitud": -2.5624588780140494
@@ -41,7 +38,6 @@
       "id": 4,
       "nombre": "Puente Colgante de Vizcaya (Portugalete)",
       "tipo": "Interés Turístico",
-      "subtipo": "Monumento / Patrimonio de la Humanidad",
       "coordenadas": {
         "latitud": 43.32339328963794,
         "longitud": -3.017152314479199
@@ -53,7 +49,6 @@
       "id": 5,
       "nombre": "Albergue de Peregrinos de Castro Urdiales",
       "tipo": "Albergue",
-      "subtipo": "Municipal (Pie de Camino)",
       "coordenadas": {
         "latitud": 43.388471434272105,
         "longitud": -3.2310093134917617
@@ -65,7 +60,6 @@
       "id": 6,
       "nombre": "Mesón Marinos",
       "tipo": "Restaurante",
-      "subtipo": "Taberna Marinera / Raciones y Tapas",
       "coordenadas": {
         "latitud": 43.445854166529706,
         "longitud": -3.455015844177295
@@ -77,7 +71,6 @@
       "id": 7,
       "nombre": "El Capricho de Gaudí",
       "tipo": "Interés Turístico",
-      "subtipo": "Monumento Artístico / Histórico",
       "coordenadas": {
         "latitud": 43.383848543861106,
         "longitud": -4.2927742730164775
@@ -89,7 +82,6 @@
       "id": 8,
       "nombre": "Albergue de Peregrinos de Llanes",
       "tipo": "Albergue",
-      "subtipo": "Municipal (Oriente Asturiano)",
       "coordenadas": {
         "latitud": 43.4219307147515,
         "longitud": -4.756855145227967
@@ -101,7 +93,6 @@
       "id": 9,
       "nombre": "Sidrería El Planeta",
       "tipo": "Restaurante",
-      "subtipo": "Sidrería Tradicional / Cocina Asturiana",
       "coordenadas": {
         "latitud": 43.547482648616224,
         "longitud": -5.665823126983523
@@ -113,7 +104,6 @@
       "id": 10,
       "nombre": "Casina San Martín",
       "tipo": "Albergue",
-      "subtipo": "Parroquial / Rural (Tramo Central)",
       "coordenadas": {
         "latitud": 43.570224693763556,
         "longitud": -5.970022255819602
@@ -125,7 +115,6 @@
       "id": 11,
       "nombre": "Albergue de Peregrinos de Almuña",
       "tipo": "Albergue",
-      "subtipo": "Municipal (Occidente Asturiano)",
       "coordenadas": {
         "latitud": 43.53261368958946,
         "longitud": -6.521978986162215
@@ -137,7 +126,6 @@
       "id": 12,
       "nombre": "Albergue de peregrinos de Ribadeo",
       "tipo": "Albergue",
-      "subtipo": "Público (Entrada a Galicia)",
       "coordenadas": {
         "latitud": 43.544329773886645,
         "longitud": -7.03743874602482
@@ -149,7 +137,6 @@
       "id": 13,
       "nombre": "Catedral de Mondoñedo",
       "tipo": "Interés Turístico",
-      "subtipo": "Monumento Histórico / Interior de Lugo",
       "coordenadas": {
         "latitud": 43.428318429150806,
         "longitud": -7.362680813489367
@@ -161,7 +148,6 @@
       "id": 14,
       "nombre": "Monasterio de Santa María de Sobrado",
       "tipo": "Albergue",
-      "subtipo": "Histórico / Monástico (La Coruña)",
       "coordenadas": {
         "latitud": 43.03919360186752,
         "longitud": -8.023220828833887
@@ -173,7 +159,6 @@
       "id": 15,
       "nombre": "Restaurante O Ceadoiro",
       "tipo": "Restaurante",
-      "subtipo": "Cocina Casera / Famoso por su Tortilla (Gontán)",
       "coordenadas": {
         "latitud": 42.91538507631239,
         "longitud": -8.32309562698089

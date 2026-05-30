@@ -37,11 +37,6 @@ export const addRutas = (rutas) => ({
   payload: rutas,
 });
 
-export const setRutaSeleccionada = (ruta) => ({
-  type: ActionTypes.SET_RUTA_SELECCIONADA,
-  payload: ruta,
-});
-
 export const setScanned = (value) => ({
   type: ActionTypes.SET_SCANNED,
   payload: value,
@@ -95,15 +90,15 @@ export const startAuthListener = () => (dispatch) => {
 // Acción para cargar QR info desde Firebase
 export const fetchQRInfo = (qrCode) => async (dispatch) => {
   try {
-    const { getQRInfo } = await import('../comun/firebaseConfig');
+    const { getQRInfo } = await import("../comun/firebaseConfig");
     const qrInfo = await getQRInfo(qrCode);
     console.log("QR Info recibida en ActionCreator:", qrInfo);
-    
+
     if (qrInfo) {
       dispatch(setQrData(qrInfo));
       dispatch(fetchQRInfoSuccess(qrInfo));
     } else {
-      dispatch(fetchQRInfoFailed('QR no encontrado en la base de datos'));
+      dispatch(fetchQRInfoFailed("QR no encontrado en la base de datos"));
     }
   } catch (error) {
     console.error("Error en fetchQRInfo:", error);

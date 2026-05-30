@@ -10,7 +10,6 @@ import {
 import { connect } from "react-redux";
 import Icon from "@expo/vector-icons/FontAwesome5";
 import { colorHeader, obtenerRutasNormalizadas } from "../comun/comun";
-import { setRutaSeleccionada } from "../redux/ActionCreators";
 
 function TarjetaBienvenida({ user }) {
   return (
@@ -35,7 +34,11 @@ function TarjetaBienvenida({ user }) {
 
 function TarjetaRuta({ ruta, onPress }) {
   return (
-    <TouchableOpacity style={styles.routeCard} onPress={onPress} activeOpacity={0.9}>
+    <TouchableOpacity
+      style={styles.routeCard}
+      onPress={onPress}
+      activeOpacity={0.9}
+    >
       <View style={styles.routeCardHeader}>
         <View style={styles.routeCardIconWrap}>
           <Icon name="route" size={16} color="#ffffff" />
@@ -54,53 +57,40 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  elegirRuta: (ruta) => dispatch(setRutaSeleccionada(ruta)),
-});
-
 class Home extends Component {
-  rutasDisponibles() {
-    return obtenerRutasNormalizadas(this.props.rutas?.rutas || []);
-  }
-
   seleccionarYRendirRuta = (ruta) => {
     if (!ruta) {
       return;
     }
 
-    this.props.elegirRuta(ruta);
+    const { navigate } = this.props.navigation;
 
-    const parentNavigation = this.props.navigation?.getParent?.();
-    if (parentNavigation) {
-      parentNavigation.navigate("Mapa");
-      return;
-    }
-
-    this.props.navigation?.navigate?.("Mapa");
+    navigate("Mapa", { screen: "Mapa", params: { rutaId: ruta.id } });
   };
 
   render() {
-    const rutas = this.rutasDisponibles();
+    const rutas = this.props.rutas?.rutas || [];
     const user = this.props.auth?.user;
 
     return (
       <View style={styles.container}>
         <FlatList
           data={rutas}
-          keyExtractor={(item) => item.key}
+          keyExtractor={(item) => item.id}
           ListHeaderComponent={<TarjetaBienvenida user={user} />}
           contentContainerStyle={styles.listContent}
           renderItem={({ item }) => (
-            <TarjetaRuta ruta={item} onPress={() => this.seleccionarYRendirRuta(item)} />
+            <TarjetaRuta
+              ruta={item}
+              onPress={() => this.seleccionarYRendirRuta(item)}
+            />
           )}
-          ListEmptyComponent={
-            <View style={styles.emptyState}>
-              <Text style={styles.emptyTitle}>Cargando rutas</Text>
-              <Text style={styles.emptyText}>
-                
-              </Text>
-            </View>
-          }
+          // ListEmptyComponent={
+          //   <View style={styles.emptyState}>
+          //     <Text style={styles.emptyTitle}>Cargando rutas</Text>
+          //     <Text style={styles.emptyText}></Text>
+          //   </View>
+          // }
           showsVerticalScrollIndicator={false}
         />
       </View>
@@ -206,4 +196,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps)(Home);

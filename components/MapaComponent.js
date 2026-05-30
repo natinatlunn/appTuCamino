@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import Icon from "@expo/vector-icons/FontAwesome5";
-import datosCamino from "../data_provisional/puntosCaracteristicos/puntosCaminoInvierno.json";
 import { colorHeader } from "../comun/comun";
 
 const mapStateToProps = (state) => {
@@ -25,7 +24,8 @@ function RenderPuntoCaracteristico({
   handleMarkerPress,
   obtenerIconoPorPunto,
 }) {
-  const isSelected = idPuntoSeleccionado === punto.id;
+  const estaSeleccionado = idPuntoSeleccionado === punto.id;
+
   return (
     <Marker
       key={punto.id}
@@ -39,14 +39,14 @@ function RenderPuntoCaracteristico({
         style={[
           styles.customMarker,
           {
-            backgroundColor: isSelected ? colorHeader : "#ffffff",
+            backgroundColor: estaSeleccionado ? colorHeader : "#ffffff",
           },
         ]}
       >
         <Icon
           name={obtenerIconoPorPunto(punto.tipo)}
           size={14}
-          color={isSelected ? "#ffffff" : colorHeader}
+          color={estaSeleccionado ? "#ffffff" : colorHeader}
         />
       </View>
     </Marker>
@@ -68,7 +68,7 @@ function RenderPopUpFlotante({
           <Text style={styles.menuTitle} numberOfLines={1}>
             {puntoSeleccionado.nombre}
           </Text>
-          <Text style={styles.menuSubtitle}>{puntoSeleccionado.subtipo}</Text>
+          <Text style={styles.menuSubtitle}>{puntoSeleccionado.tipo}</Text>
         </View>
         <TouchableOpacity onPress={cerrarPopup} style={styles.closeButton}>
           <Icon name="times" size={16} color="#999999" />
@@ -107,7 +107,6 @@ function RenderPopUpFlotante({
 class Mapa extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       puntoSeleccionado: null,
     };
@@ -164,55 +163,44 @@ class Mapa extends Component {
     this.cerrarPopup();
   }
 
-  formatearCoordenadas(rutas, rutaSeleccionada) {
-    if (rutaSeleccionada?.coordinates?.length) {
-      return rutaSeleccionada.coordinates.map((punto) => ({
-        latitude: punto[1],
-        longitude: punto[0],
-      }));
-    }
+  formatearCoordenadas(rutaSeleccionada) {
+    if (!rutaSeleccionada?.coordenadas?.length) return [];
 
-    if (!rutas || rutas.length === 0) return [];
-
-    const primeraRuta = Object.values(rutas[0])[0]?.[0]?.coordinates || [];
-
-    return primeraRuta.map((punto) => ({
+    return rutaSeleccionada.coordenadas.map((punto) => ({
       latitude: punto[1],
       longitude: punto[0],
     }));
   }
 
   render() {
-    const routeCoords = this.formatearCoordenadas(
-      this.props.rutas.rutas,
-      this.props.rutas.rutaSeleccionada,
-    );
-    const idPuntoSeleccionado = this.state.puntoSeleccionado
-      ? this.state.puntoSeleccionado.id
-      : null;
+    const idRuta = this.props.route.params.rutaId;
+    const rutaSeleccionada = this.props.rutas.rutas[idRuta];
+    const rutaCoordenadas = this.formatearCoordenadas(rutaSeleccionada);
+
+    const idPuntoSeleccionado = this.state.puntoSeleccionado?.id;
 
     return (
       <SafeAreaView style={styles.container}>
         <MapView
           provider={PROVIDER_GOOGLE}
           style={styles.map}
-          initialRegion={{
-            latitude: 42.466,
-            longitude: -2.445,
-            latitudeDelta: 5,
-            longitudeDelta: 5,
-          }}
+          // initialRegion={{
+          //   latitude: 42.466,
+          //   longitude: -2.445,
+          //   latitudeDelta: 5,
+          //   longitudeDelta: 5,
+          // }}
           onPress={this.cerrarPopup}
         >
-          {routeCoords.length > 0 && (
+          {rutaCoordenadas.length > 0 && (
             <Polyline
-              coordinates={routeCoords}
+              coordinates={rutaCoordenadas}
               strokeColor="#005293"
               strokeWidth={5}
             />
           )}
 
-          {datosCamino.puntos_caracteristicos.map((punto) => (
+          {rutaSeleccionada.puntosCaracteristicos?.map((punto) => (
             <RenderPuntoCaracteristico
               key={punto.id}
               idPuntoSeleccionado={idPuntoSeleccionado}

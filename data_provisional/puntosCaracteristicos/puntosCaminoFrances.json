@@ -5,7 +5,6 @@
       "id": 1,
       "nombre": "Gran Albergue de Peregrinos de Roncesvalles",
       "tipo": "Albergue",
-      "subtipo": "Municipal / Parroquial (A pie de ruta)",
       "coordenadas": {
         "latitud": 43.01035024122622,
         "longitud": -1.3191300251978288
@@ -15,9 +14,8 @@
     },
     {
       "id": 2,
-      "nombre": "Monumento al Peregrino (Alto del Perdón)",
+      "nombre": "Monumento al Peregrino",
       "tipo": "Interés Turístico",
-      "subtipo": "Mirador / Escultura",
       "coordenadas": {
         "latitud": 42.73586930971131,
         "longitud": -1.7426499724451971
@@ -29,7 +27,6 @@
       "id": 3,
       "nombre": "Puente Románico de Puente la Reina",
       "tipo": "Interés Turístico",
-      "subtipo": "Monumento Histórico",
       "coordenadas": {
         "latitud": 42.670173584025726,
         "longitud": -1.8180449874667846
@@ -41,7 +38,6 @@
       "id": 4,
       "nombre": "Café Iruña",
       "tipo": "Restaurante",
-      "subtipo": "Café Histórico / Menú del Día (Pamplona)",
       "coordenadas": {
         "latitud": 42.817604207599594,
         "longitud": -1.6433238259446434
@@ -53,7 +49,6 @@
       "id": 5,
       "nombre": "Fuente del Vino de las Bodegas Irache",
       "tipo": "Interés Turístico",
-      "subtipo": "Zona de Avituallamiento",
       "coordenadas": {
         "latitud": 42.65087918934357,
         "longitud": -2.043629452694027
@@ -65,7 +60,6 @@
       "id": 6,
       "nombre": "Albergue Parroquial San Juan Bautista de Grañón",
       "tipo": "Albergue",
-      "subtipo": "Parroquial / Donativo (En la ruta)",
       "coordenadas": {
         "latitud": 42.450466602634954,
         "longitud": -3.0269754509244433
@@ -77,7 +71,6 @@
       "id": 7,
       "nombre": "Mesón Egüés",
       "tipo": "Restaurante",
-      "subtipo": "Especialidad en Carnes y Vino Rioja",
       "coordenadas": {
         "latitud": 42.46678013801482,
         "longitud": -2.457331586419972
@@ -89,7 +82,6 @@
       "id": 8,
       "nombre": "Albergue Municipal de Peregrinos de Burgos",
       "tipo": "Albergue",
-      "subtipo": "Municipal Urbano (Lado Catedral)",
       "coordenadas": {
         "latitud": 42.34251019568529,
         "longitud": -3.7038095779111124
@@ -101,7 +93,6 @@
       "id": 9,
       "nombre": "Albergue de San Nicolás de Puente Fitero",
       "tipo": "Albergue",
-      "subtipo": "Histórico / Confraternita (Pie de Camino)",
       "coordenadas": {
         "latitud": 42.279059981766174,
         "longitud": -4.2432304914044465
@@ -113,7 +104,6 @@
       "id": 10,
       "nombre": "Real Monasterio de San Zoilo",
       "tipo": "Interés Turístico",
-      "subtipo": "Monumento / Hotel Histórico",
       "coordenadas": {
         "latitud": 42.340884972361366,
         "longitud": -4.611102064417778
@@ -125,7 +115,6 @@
       "id": 11,
       "nombre": "Catedral de León (Pulchra Leonina)",
       "tipo": "Interés Turístico",
-      "subtipo": "Monumento / Punto Cultural",
       "coordenadas": {
         "latitud": 42.5996080967929,
         "longitud": -5.567157835582222
@@ -137,7 +126,6 @@
       "id": 12,
       "nombre": "Restaurante La Pepa",
       "tipo": "Restaurante",
-      "subtipo": "Cocina de Mercado / Tapas (Astorga)",
       "coordenadas": {
         "latitud": 42.45551956056245,
         "longitud": -6.056085146964382
@@ -149,7 +137,6 @@
       "id": 13,
       "nombre": "Castillo de los Templarios de Ponferrada",
       "tipo": "Interés Turístico",
-      "subtipo": "Fortaleza Histórica",
       "coordenadas": {
         "latitud": 42.543482817158726,
         "longitud": -6.593770649075557
@@ -161,7 +148,6 @@
       "id": 14,
       "nombre": "Albergue de Peregrinos de O Cebreiro",
       "tipo": "Albergue",
-      "subtipo": "Público de la Xunta (En el Camino)",
       "coordenadas": {
         "latitud": 42.70791984995808,
         "longitud": -7.045977449075557
@@ -173,7 +159,6 @@
       "id": 15,
       "nombre": "Pulpería Ezequiel",
       "tipo": "Restaurante",
-      "subtipo": "Especialidad Pulpo a la Gallega",
       "coordenadas": {
         "latitud": 42.91354885062316,
         "longitud": -8.012511835582222

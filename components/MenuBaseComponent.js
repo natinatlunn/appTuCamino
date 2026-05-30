@@ -78,7 +78,14 @@ class MenuBase extends Component {
   };
 
   PerfilNavegador = () => {
-    return <Perfil />;
+    return (
+      <Stack.Navigator
+        initialRouteName="Perfil"
+        screenOptions={() => this.menuHeaderOptions()}
+      >
+        <Stack.Screen name="Perfil" component={Perfil} />
+      </Stack.Navigator>
+    );
   };
 
   BottomTabNavigator = () => {

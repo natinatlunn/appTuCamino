@@ -5,7 +5,6 @@
       "id": 1,
       "nombre": "Faro de Fisterra",
       "tipo": "Interés Turístico",
-      "subtipo": "Faro / Fin del Mundo",
       "coordenadas": {
         "latitud": 42.88240465629297,
         "longitud": -9.271878169927428
