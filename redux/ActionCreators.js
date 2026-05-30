@@ -67,11 +67,27 @@ export const setAuthLoading = (loading) => ({
   payload: loading,
 });
 
+export const mapFirebaseUser = (user) => {
+  if (!user) {
+    return null;
+  }
+
+  return {
+    uid: user.uid,
+    email: user.email || null,
+    displayName: user.displayName || null,
+    emailVerified: !!user.emailVerified,
+    photoURL: user.photoURL || null,
+    phoneNumber: user.phoneNumber || null,
+    isAnonymous: !!user.isAnonymous,
+  };
+};
+
 export const startAuthListener = () => (dispatch) => {
   dispatch(setAuthLoading(true));
 
   return onAuthStateChanged(auth, (currentUser) => {
-    dispatch(setAuthUser(currentUser));
+    dispatch(setAuthUser(mapFirebaseUser(currentUser)));
     dispatch(setAuthLoading(false));
   });
 };

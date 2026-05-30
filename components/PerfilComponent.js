@@ -14,6 +14,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { colorHeader } from "../comun/comun";
 import { auth } from "../comun/firebaseConfig";
 import { connect } from "react-redux";
+import { mapFirebaseUser, setAuthUser } from "../redux/ActionCreators";
 
 class Perfil extends Component {
   constructor(props) {
@@ -34,8 +35,8 @@ class Perfil extends Component {
 
     try {
       const credential = await signInWithEmailAndPassword(auth, email.trim(), password);
+      this.props.dispatch(setAuthUser(mapFirebaseUser(credential.user)));
       this.setState({
-        user: credential.user,
         email: "",
         password: "",
       });
@@ -55,8 +56,8 @@ class Perfil extends Component {
 
     try {
       await signOut(auth);
+      this.props.dispatch(setAuthUser(null));
       this.setState({
-        user: null,
         email: "",
         password: "",
       });
@@ -72,7 +73,7 @@ class Perfil extends Component {
     const { email, password, submitting, message } = this.state;
     const { user, loading } = this.props.auth;
 
-    if (loading) {
+    if (loading && !user) {
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={colorHeader} />
@@ -82,6 +83,8 @@ class Perfil extends Component {
     }
 
     if (user) {
+      const displayName = user.displayName || (user.email || "").split("@")[0];
+
       return (
         <View style={styles.container}>
           <View style={styles.heroCard}>
@@ -90,7 +93,7 @@ class Perfil extends Component {
             </View>
             <Text style={styles.title}>Bienvenido a tu cuenta!</Text>
             <Text style={styles.subtitle}>
-              Has iniciado sesión como {user.email || "usuario autenticado"}.
+              Has iniciado sesión como {displayName || "usuario autenticado"}.
             </Text>
           </View>
 
