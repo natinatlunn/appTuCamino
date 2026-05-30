@@ -5,7 +5,6 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  Modal,
   FlatList,
 } from "react-native";
 import { connect } from "react-redux";
@@ -45,7 +44,7 @@ function TarjetaRuta({ ruta, onPress }) {
         </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.routeTitle}>{ruta.nombre}</Text>
-          <Text style={styles.routeSubtitle}>Toca para ver detalles</Text>
+          <Text style={styles.routeSubtitle}>Toca para abrirla en el mapa</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -66,8 +65,6 @@ class Home extends Component {
 
     this.state = {
       user: null,
-      rutaModalVisible: false,
-      rutaSeleccionada: null,
     };
   }
 
@@ -87,27 +84,24 @@ class Home extends Component {
     return obtenerRutasNormalizadas(this.props.rutas?.rutas || []);
   }
 
-  abrirModal = (ruta) => {
-    this.setState({ rutaModalVisible: true, rutaSeleccionada: ruta });
-  };
-
-  cerrarModal = () => {
-    this.setState({ rutaModalVisible: false, rutaSeleccionada: null });
-  };
-
-  elegirRuta = () => {
-    if (!this.state.rutaSeleccionada) {
+  seleccionarYRendirRuta = (ruta) => {
+    if (!ruta) {
       return;
     }
 
-    this.props.elegirRuta(this.state.rutaSeleccionada);
-    this.cerrarModal();
+    this.props.elegirRuta(ruta);
+
+    const parentNavigation = this.props.navigation?.getParent?.();
+    if (parentNavigation) {
+      parentNavigation.navigate("Mapa");
+      return;
+    }
+
+    this.props.navigation?.navigate?.("Mapa");
   };
 
   render() {
     const rutas = this.rutasDisponibles();
-    const rutaModalVisible = this.state.rutaModalVisible;
-    const rutaSeleccionada = this.state.rutaSeleccionada;
 
     return (
       <View style={styles.container}>
@@ -117,7 +111,7 @@ class Home extends Component {
           ListHeaderComponent={<TarjetaBienvenida user={this.state.user} />}
           contentContainerStyle={styles.listContent}
           renderItem={({ item }) => (
-            <TarjetaRuta ruta={item} onPress={() => this.abrirModal(item)} />
+            <TarjetaRuta ruta={item} onPress={() => this.seleccionarYRendirRuta(item)} />
           )}
           ListEmptyComponent={
             <View style={styles.emptyState}>
@@ -129,33 +123,6 @@ class Home extends Component {
           }
           showsVerticalScrollIndicator={false}
         />
-
-        <Modal
-          visible={rutaModalVisible}
-          transparent
-          animationType="slide"
-          onRequestClose={this.cerrarModal}
-        >
-          <View style={styles.modalBackdrop}>
-            <View style={styles.modalCard}>
-              <View style={styles.modalHeader}>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.modalTitle}>{rutaSeleccionada?.nombre}</Text>
-                  <Text style={styles.modalSubtitle}>Camino de Santiago</Text>
-                </View>
-                <TouchableOpacity onPress={this.cerrarModal} style={styles.closeButton}>
-                  <Icon name="times" size={18} color="#666666" />
-                </TouchableOpacity>
-              </View>
-
-              <Text style={styles.modalText}>{rutaSeleccionada?.descripcion}</Text>
-
-              <TouchableOpacity style={styles.chooseButton} onPress={this.elegirRuta}>
-                <Text style={styles.chooseButtonText}>Elegir ruta</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
       </View>
     );
   }
@@ -240,53 +207,6 @@ const styles = StyleSheet.create({
     marginTop: 3,
     fontSize: 13,
     color: "#6b6258",
-  },
-  modalBackdrop: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.45)",
-    justifyContent: "center",
-    padding: 20,
-  },
-  modalCard: {
-    backgroundColor: "#ffffff",
-    borderRadius: 24,
-    padding: 20,
-  },
-  modalHeader: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    marginBottom: 12,
-  },
-  modalTitle: {
-    fontSize: 22,
-    fontWeight: "800",
-    color: "#1f1a14",
-  },
-  modalSubtitle: {
-    marginTop: 4,
-    fontSize: 13,
-    color: "#8a8076",
-  },
-  closeButton: {
-    padding: 4,
-    marginLeft: 10,
-  },
-  modalText: {
-    fontSize: 15,
-    lineHeight: 22,
-    color: "#4d463d",
-    marginBottom: 18,
-  },
-  chooseButton: {
-    backgroundColor: colorHeader,
-    borderRadius: 16,
-    paddingVertical: 14,
-    alignItems: "center",
-  },
-  chooseButtonText: {
-    color: "#1f1a14",
-    fontWeight: "800",
-    fontSize: 16,
   },
   emptyState: {
     backgroundColor: "#ffffff",
