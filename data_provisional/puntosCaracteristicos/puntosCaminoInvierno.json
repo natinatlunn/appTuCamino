@@ -1,0 +1,115 @@
+{
+  "ruta": "Camino de Iniverno",
+  "puntos_caracteristicos": [
+    {
+      "id": "1",
+      "nombre": "Castillo de los Templarios",
+      "tipo": "Monumento",
+      "coordenadas": {
+        "latitud": 42.543447534178554,
+        "longitud": -6.593796775845172
+      },
+      "direccion": "C. Gil y Carrasco, 1, 24401 Ponferrada, León",
+      "descripcion": "Imponente fortaleza medieval construida por la Orden del Temple en Ponteferrada, uno de los monumentos más emblemáticos."
+    },
+    {
+      "id": "2",
+      "tipo": "Albergue",
+      "nombre": "Casa Castañé",
+      "coordenadas": {
+        "latitud": 42.41228216400581,
+        "longitud": -6.820047473967435
+      },
+      "direccion": "C. Crucero, 9A, 24380 Puente de Domingo Flórez, León",
+      "descripcion": "Casa rural acogedora en Puente de Domingo Flórez, cerca de Las Médulas, conocida por su ambiente familiar, vistas a la montaña y alojamiento para peregrinos y viajeros."
+    },
+    {
+      "id": "3",
+      "tipo": "Restaurante",
+      "nombre": "San Mauro",
+      "coordenadas": {
+        "latitud": 42.41551294647727,
+        "longitud": -6.980965096295793
+      },
+      "direccion": "Praza da Igrexa, 32300 O Barco, Ourense",
+      "descripcion": "Restaurante de cocina tradicional gallega en el casco histórico de O Barco de Valdeorras, conocido por sus platos caseros, mariscos, carnes y ambiente familiar."
+    },
+    {
+      "id": "4",
+      "tipo": "Hostal",
+      "nombre": "Hostal Quiper",
+      "coordenadas": {
+        "latitud": 42.47590378528514,
+        "longitud": -7.27193035264264
+      },
+      "direccion": "Rúa Real, 62, 27320 Quiroga, Lugo",
+      "descripcion": "Hostal familiar y acogedor en el centro de Quiroga, muy utilizado por peregrinos del Camino de Invierno, con habitaciones cómodas, ambiente tranquilo y cafetería propia."
+    },
+    {
+      "id": "5",
+      "tipo": "Monumento",
+      "nombre": "Ponte Vella",
+      "coordenadas": {
+        "latitud": 42.52297729262464,
+        "longitud": -7.514824381720591
+      },
+      "direccion": "Monforte de Lemos, 27400 Monforte de Lemos, Lugo",
+      "descripcion": "Puente histórico de piedra sobre el río Cabe en Monforte de Lemos, de origen medieval y tradición romana, considerado uno de los monumentos más emblemáticos de la Ribeira Sacra."
+    },
+    {
+      "id": "6",
+      "tipo": "Restaurante",
+      "nombre": "A Cociña de Fon",
+      "coordenadas": {
+        "latitud": 42.60697603044928,
+        "longitud": -7.768007219261525
+      },
+      "direccion": "R. Juan XXIII, 56, Bajo, 27500 Chantada, Lugo",
+      "descripcion": "Restaurante de cocina tailandesa en Chantada, situado en el Camino de Invierno, conocido por sus currys, pad thai y ambiente acogedor con una propuesta gastronómica diferente en la Ribeira Sacra."
+    },
+    {
+      "id": "7",
+      "tipo": "Fuente",
+      "nombre": "Fonte das Cabirtas",
+      "coordenadas": {
+        "latitud": 42.66176329693281,
+        "longitud": -8.119924873602011
+      },
+      "direccion": "36515 Lalín, Pontevedra",
+      "descripcion": "Fuente tradicional situada junto al Rego das Cabirtas, en el entorno del paseo fluvial de Lalín, utilizada como punto de descanso para peregrinos y senderistas rodeado de naturaleza."
+    },
+    {
+      "id": "8",
+      "tipo": "Albergue",
+      "nombre": "Albergue Trabazo",
+      "coordenadas": {
+        "latitud": 42.69807351365257,
+        "longitud": -8.247488976706272
+      },
+      "direccion": "Rúa Alfonso Trabazo, 8, 2º, 36540 Silleda, Pontevedra",
+      "descripcion": "Albergue moderno para peregrinos en Silleda, con ambiente acogedor, habitaciones compartidas y servicios pensados para el descanso."
+    },
+    {
+      "id": "9",
+      "tipo": "Restaurante",
+      "nombre": "Café Bar Quenllas",
+      "coordenadas": {
+        "latitud": 42.776672288244114,
+        "longitud": -8.424862468467042
+      },
+      "direccion": "Eiravedra, 30, 15880 Vedra, A Coruña",
+      "descripcion": "Cafetería y bar tradicional en Vedra conocida por sus desayunos, bocadillos, tapas y ambiente acogedor"
+    },
+    {
+      "id": "10",
+      "tipo": "Monumento",
+      "nombre": "Plaza Inmaculada",
+      "coordenadas": {
+        "latitud": 42.881200973401825,
+        "longitud": -8.544236922125604
+      },
+      "direccion": "Santiago de Compostela, 15704 Santiago de Compostela, La Coruña",
+      "descripcion": "Plaza histórica situada junto a la fachada de la Azabachería de la Catedral de Santiago, rodeada por el monasterio de San Martiño Pinario."
+    }
+  ]
+}

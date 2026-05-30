@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import Icon from "@expo/vector-icons/FontAwesome5";
-import datosCamino from "../data_provisional/puntosCaracteristicos/puntosCaminoFisterraMuxia.json";
+import datosCamino from "../data_provisional/puntosCaracteristicos/puntosCaminoInvierno.json";
 import { colorHeader } from "../comun/comun";
 
 const mapStateToProps = (state) => {
@@ -122,6 +122,7 @@ class Mapa extends Component {
   obtenerIconoPorPunto(tipo) {
     switch (tipo) {
       case "Albergue":
+      case "Hostal":
         return "bed";
       case "Restaurante":
         return "utensils";
