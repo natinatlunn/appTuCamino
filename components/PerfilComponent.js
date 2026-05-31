@@ -34,7 +34,11 @@ class Perfil extends Component {
     this.setState({ submitting: true, message: "" });
 
     try {
-      const credential = await signInWithEmailAndPassword(auth, email.trim(), password);
+      const credential = await signInWithEmailAndPassword(
+        auth,
+        email.trim(),
+        password,
+      );
       this.props.setAuthUser(mapFirebaseUser(credential.user));
       this.setState({
         email: "",
@@ -63,7 +67,9 @@ class Perfil extends Component {
       });
     } catch (error) {
       const authError = error?.code ? `${error.code}: ` : "";
-      this.setState({ message: `${authError}No se ha podido cerrar la sesión.` });
+      this.setState({
+        message: `${authError}No se ha podido cerrar la sesión.`,
+      });
     } finally {
       this.setState({ submitting: false });
     }
@@ -71,9 +77,9 @@ class Perfil extends Component {
 
   render() {
     const { email, password, submitting, message } = this.state;
-    const { user, loading } = this.props.auth;
+    const { user, loading: isLoading, datosPerfil } = this.props.auth;
 
-    if (loading && !user) {
+    if (isLoading && !user) {
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={colorHeader} />
@@ -82,14 +88,18 @@ class Perfil extends Component {
       );
     }
 
-    if (user) {
-      const displayName = user.displayName || (user.email || "").split("@")[0];
+    if (user && datosPerfil) {
+      const displayName = datosPerfil.nombre;
 
       return (
         <View style={styles.container}>
           <View style={styles.heroCard}>
             <View style={styles.iconCircle}>
-              <MaterialCommunityIcons name="account-check" size={34} color="#ffffff" />
+              <MaterialCommunityIcons
+                name="account-check"
+                size={34}
+                color="#ffffff"
+              />
             </View>
             <Text style={styles.title}>Bienvenido a tu cuenta!</Text>
             <Text style={styles.subtitle}>
@@ -119,10 +129,13 @@ class Perfil extends Component {
       >
         <View style={styles.heroCard}>
           <View style={styles.iconCircle}>
-            <MaterialCommunityIcons name="account-lock" size={34} color="#ffffff" />
+            <MaterialCommunityIcons
+              name="account-lock"
+              size={34}
+              color="#ffffff"
+            />
           </View>
           <Text style={styles.title}>Iniciar sesión</Text>
-          
         </View>
 
         <View style={styles.formCard}>
@@ -142,7 +155,9 @@ class Perfil extends Component {
           <TextInput
             style={styles.input}
             value={password}
-            onChangeText={(nextPassword) => this.setState({ password: nextPassword })}
+            onChangeText={(nextPassword) =>
+              this.setState({ password: nextPassword })
+            }
             placeholder="Tu contraseña"
             placeholderTextColor="#a49c92"
             secureTextEntry

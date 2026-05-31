@@ -8,3 +8,4 @@ export const FETCH_QR_INFO_SUCCESS = "FETCH_QR_INFO_SUCCESS";
 export const FETCH_QR_INFO_FAILED = "FETCH_QR_INFO_FAILED";
 export const SET_AUTH_USER = "SET_AUTH_USER";
 export const SET_AUTH_LOADING = "SET_AUTH_LOADING";
+export const ADD_USER = "ADD_USER";

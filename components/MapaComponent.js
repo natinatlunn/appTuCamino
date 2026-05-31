@@ -21,6 +21,7 @@ import { colorHeader } from "../comun/comun";
 const mapStateToProps = (state) => {
   return {
     rutas: state.rutas,
+    auth: state.auth,
   };
 };
 
@@ -479,6 +480,8 @@ class Mapa extends Component {
     const rutaCoordenadas = this.formatearCoordenadas(rutaSeleccionada);
 
     const idPuntoSeleccionado = this.state.puntoSeleccionado?.id;
+
+    const usuario = this.props.auth.datosPerfil;
 
     return (
       <SafeAreaView style={styles.container}>

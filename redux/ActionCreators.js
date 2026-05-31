@@ -82,7 +82,14 @@ export const startAuthListener = () => (dispatch) => {
   dispatch(setAuthLoading(true));
 
   return onAuthStateChanged(auth, (currentUser) => {
-    dispatch(setAuthUser(mapFirebaseUser(currentUser)));
+    if (currentUser) {
+      dispatch(setAuthUser(mapFirebaseUser(currentUser)));
+      dispatch(fetchUsuario(currentUser.uid));
+    } else {
+      dispatch(setAuthUser(null));
+      dispatch(addUsuario(null));
+    }
+
     dispatch(setAuthLoading(false));
   });
 };
@@ -115,3 +122,41 @@ export const fetchQRInfoFailed = (errmess) => ({
   type: ActionTypes.FETCH_QR_INFO_FAILED,
   payload: errmess,
 });
+
+export const addUsuario = (datos) => ({
+  type: ActionTypes.ADD_USER,
+  payload: datos,
+});
+
+export const fetchUsuario = (uid) => (dispatch) => {
+  return fetch(baseUrl + "usuarios.json")
+    .then(
+      (response) => {
+        if (response.ok) {
+          return response;
+        } else {
+          let error = new Error(
+            "Error " + response.status + ": " + response.statusText,
+          );
+          error.response = response;
+          throw error;
+        }
+      },
+      (error) => {
+        throw new Error(error.message);
+      },
+    )
+    .then((response) => response.json())
+    .then((usuarios) => {
+      const usuario = usuarios[uid];
+
+      if (usuario) {
+        dispatch(addUsuario(usuario));
+      } else {
+        console.warn("No se encontraron datos extra para el UID:", uid);
+      }
+    })
+    .catch((error) =>
+      console.error("Error al obtener datos del JSON:", error.message),
+    );
+};
