@@ -7,7 +7,12 @@ import {
   Text,
   TouchableOpacity,
   SafeAreaView,
-  ScrollView,
+  FlatList,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Modal,
 } from "react-native";
 import { connect } from "react-redux";
 import Icon from "@expo/vector-icons/FontAwesome5";
@@ -54,54 +59,16 @@ function RenderPuntoCaracteristico({
   );
 }
 
-// function RenderStars({ rating }) {
-//   const stars = [];
-//   for (let i = 1; i <= 5; i++) {
-//     stars.push(
-//       <Icon
-//         key={i}
-//         name="star"
-//         solid={i <= rating}
-//         size={10}
-//         color="#FBC02D"
-//         style={{ marginRight: 1 }}
-//       />,
-//     );
-//   }
-//   return <View style={{ flexDirection: "row", marginRight: 4 }}>{stars}</View>;
-// }
-
 function RenderPopUpFlotante({
   puntoSeleccionado,
   cerrarPopup,
   seccionInfoDesplegada,
   setSeccionInfoDesplegada,
+  seccionComentariosDesplegada,
+  setSeccionComentariosDesplegada,
+  setMostrarFormularioComentario,
 }) {
   if (!puntoSeleccionado) return null;
-
-  // const [comentariosAbiertos, setComentariosAbiertos] = useState(false);
-  // const comentarios = puntoSeleccionado.comentarios || [
-  //   {
-  //     id: 1,
-  //     lugar: "Albergue Jesús y María:",
-  //     texto: "¡Increíble lugar! Limpio y personal amable.",
-  //     autor: "Maria L.",
-  //     tiempo: "hace 2h",
-  //     rating: 5,
-  //     icon: "bed",
-  //     iconBg: "#2b5b84",
-  //   },
-  //   {
-  //     id: 2,
-  //     lugar: "Restaurante San Cernin:",
-  //     texto: "Menú del día muy rico y económico.",
-  //     autor: "Pablo S.",
-  //     tiempo: "hace 4h",
-  //     rating: 4,
-  //     icon: "utensils",
-  //     iconBg: "#a0522d",
-  //   },
-  // ];
 
   return (
     <View style={styles.floatingPopupContainer}>
@@ -115,65 +82,20 @@ function RenderPopUpFlotante({
         </TouchableOpacity>
       </View>
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={styles.scrollMenuContainer}
-      >
-        <RenderInformacionPunto
-          puntoSeleccionado={puntoSeleccionado}
-          seccionInfoDesplegada={seccionInfoDesplegada}
-          setSeccionInfoDesplegada={setSeccionInfoDesplegada}
-        />
-        {/* OPCIÓN 2: VER COMENTARIOS RECIENTES */}
-        {/* <TouchableOpacity
-          style={[styles.menuButton, !comentariosAbiertos && styles.lastButton]}
-          onPress={() => {
-            setComentariosAbiertos(!comentariosAbiertos);
-            if (!comentariosAbiertos) setInfoAbierta(false); // Cierra el otro al abrir este
-          }}
-        >
-          <Icon
-            name="comment-alt"
-            size={16}
-            color="#111111"
-            style={styles.buttonIcon}
-          />
-          <Text style={styles.menuButtonText}>Ver comentarios recientes</Text>
-          <Icon
-            name={comentariosAbiertos ? "chevron-up" : "chevron-down"}
-            size={14}
-            color="#666666"
-            style={styles.chevronIcon}
-          />
-        </TouchableOpacity>
+      <RenderInformacionPunto
+        puntoSeleccionado={puntoSeleccionado}
+        seccionInfoDesplegada={seccionInfoDesplegada}
+        setSeccionInfoDesplegada={setSeccionInfoDesplegada}
+        setSeccionComentariosDesplegada={setSeccionComentariosDesplegada}
+      />
 
-        <DesplegableAcordeon isOpen={comentariosAbiertos}>
-          {comentarios.map((comentario) => (
-            <View key={comentario.id} style={styles.commentCard}>
-              <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
-                <View
-                  style={[
-                    styles.commentAvatar,
-                    { backgroundColor: comentario.iconBg },
-                  ]}
-                >
-                  <Icon name={comentario.icon} size={11} color="#ffffff" />
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.commentLugar}>{comentario.lugar}</Text>
-                  <Text style={styles.commentTexto}>{comentario.texto}</Text>
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <RenderStars rating={comentario.rating} />
-                    <Text style={styles.commentMetaText}>
-                      - {comentario.autor} ({comentario.tiempo})
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-          ))}
-        </DesplegableAcordeon> */}
-      </ScrollView>
+      <RenderComentariosPunto
+        puntoSeleccionado={puntoSeleccionado}
+        seccionComentariosDesplegada={seccionComentariosDesplegada}
+        setSeccionComentariosDesplegada={setSeccionComentariosDesplegada}
+        setSeccionInfoDesplegada={setSeccionInfoDesplegada}
+        setMostrarFormularioComentario={setMostrarFormularioComentario}
+      />
     </View>
   );
 }
@@ -182,14 +104,15 @@ function RenderInformacionPunto({
   puntoSeleccionado,
   seccionInfoDesplegada,
   setSeccionInfoDesplegada,
+  setSeccionComentariosDesplegada,
 }) {
   return (
     <>
       <TouchableOpacity
         style={styles.menuButton}
         onPress={() => {
-          setSeccionInfoDesplegada(seccionInfoDesplegada);
-          //if (!infoAbierta) setComentariosAbiertos(false);
+          setSeccionInfoDesplegada(!seccionInfoDesplegada);
+          if (!seccionInfoDesplegada) setSeccionComentariosDesplegada(false);
         }}
       >
         <Icon
@@ -237,8 +160,228 @@ function RenderInformacionPunto({
   );
 }
 
-function RenderComentariosPunto({ punto }) {
-  return <></>;
+function RenderComentariosPunto({
+  puntoSeleccionado,
+  seccionComentariosDesplegada,
+  setSeccionComentariosDesplegada,
+  setSeccionInfoDesplegada,
+  setMostrarFormularioComentario,
+}) {
+  const comentarios = puntoSeleccionado.comentarios || [
+    {
+      id: 1,
+      lugar: "Albergue Jesús y María:",
+      texto: "¡Increíble lugar! Limpio y personal amable.",
+      autor: "Maria L.",
+      tiempo: "hace 2h",
+      puntuacion: 5,
+      icon: "user",
+      iconBg: "#2b5b84",
+    },
+    {
+      id: 2,
+      lugar: "Restaurante San Cernin:",
+      texto: "Menú del día muy rico y económico.",
+      autor: "Pablo S.",
+      tiempo: "hace 4h",
+      puntuacion: 4,
+      icon: "user",
+      iconBg: "#a0522d",
+    },
+    {
+      id: 3,
+      lugar: "Albergue Jesús y María:",
+      texto: "¡Increíble lugar! Limpio y personal amable.",
+      autor: "Maria L.",
+      tiempo: "hace 2h",
+      puntuacion: 5,
+      icon: "user",
+      iconBg: "#2b5b84",
+    },
+    {
+      id: 4,
+      lugar: "Restaurante San Cernin:",
+      texto: "Menú del día muy rico y económico.",
+      autor: "Pablo S.",
+      tiempo: "hace 4h",
+      puntuacion: 4,
+      icon: "user",
+      iconBg: "#a0522d",
+    },
+  ];
+
+  return (
+    <>
+      <TouchableOpacity
+        style={[
+          styles.menuButton,
+          !seccionComentariosDesplegada && styles.lastButton,
+        ]}
+        onPress={() => {
+          setSeccionComentariosDesplegada(!seccionComentariosDesplegada);
+          if (!seccionComentariosDesplegada) setSeccionInfoDesplegada(false);
+        }}
+      >
+        <Icon
+          name="comment-alt"
+          size={16}
+          color="#111111"
+          style={styles.buttonIcon}
+        />
+        <Text style={styles.menuButtonText}>
+          Opiniones y reseñas ({comentarios.length})
+        </Text>
+        <Icon
+          name={seccionComentariosDesplegada ? "chevron-up" : "chevron-down"}
+          size={14}
+          color="#666666"
+          style={styles.chevronIcon}
+        />
+      </TouchableOpacity>
+      {seccionComentariosDesplegada && (
+        <View style={styles.comentariosContainer}>
+          <FlatList
+            data={comentarios}
+            keyExtractor={(item) => item.id.toString()}
+            showsVerticalScrollIndicator={true}
+            renderItem={({ item: comentario }) => (
+              <View style={styles.commentCard}>
+                <View
+                  style={{ flexDirection: "row", alignItems: "flex-start" }}
+                >
+                  <View
+                    style={[
+                      styles.commentAvatar,
+                      { backgroundColor: comentario.iconBg },
+                    ]}
+                  >
+                    <Icon name={comentario.icon} size={11} color="#ffffff" />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <View style={styles.comentarioEncabezado}>
+                      <Text style={styles.commentLugar}>
+                        {comentario.autor}
+                      </Text>
+                      <RenderEstrellas puntuacion={comentario.puntuacion} />
+                    </View>
+                    <Text style={styles.commentTexto}>{comentario.texto}</Text>
+                    <Text style={styles.commentMetaText}>
+                      {comentario.tiempo}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            )}
+          />
+          <TouchableOpacity
+            style={styles.fabButton}
+            onPress={() => setMostrarFormularioComentario()}
+          >
+            <Icon name="plus" size={18} color="#fff" />
+          </TouchableOpacity>
+        </View>
+      )}
+    </>
+  );
+}
+
+function RenderEstrellas({ puntuacion }) {
+  const stars = [];
+  for (let i = 1; i <= 5; i++) {
+    stars.push(
+      <Icon
+        key={i}
+        name="star"
+        solid={i <= puntuacion}
+        size={10}
+        color="#FBC02D"
+        style={{ marginRight: 1 }}
+      />,
+    );
+  }
+  return <View style={{ flexDirection: "row", marginRight: 4 }}>{stars}</View>;
+}
+
+function ModalNuevoComentario({
+  mostrarFormularioComentario,
+  setCerrarFormularioComentario,
+  comentario,
+  setComentario,
+  puntuacion,
+  setPuntuacion,
+}) {
+  return (
+    <Modal
+      visible={mostrarFormularioComentario}
+      transparent
+      animationType="fade"
+      onRequestClose={() => setCerrarFormularioComentario()}
+    >
+      <TouchableWithoutFeedback onPress={() => setCerrarFormularioComentario()}>
+        <View style={styles.modalContainer}>
+          <TouchableWithoutFeedback>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              style={styles.modalContent}
+            >
+              <TouchableOpacity
+                style={styles.cerrarModal}
+                onPress={() => setCerrarFormularioComentario()}
+              >
+                <Icon name="times" size={18} color="#666" />
+              </TouchableOpacity>
+
+              <Text style={styles.modalTitle}>Añadir comentario</Text>
+
+              <View style={styles.ratingContainer}>
+                <View style={styles.starsContainer}>
+                  {[1, 2, 3, 4, 5].map((estrella) => (
+                    <TouchableOpacity
+                      key={estrella}
+                      onPress={() => setPuntuacion(estrella)}
+                    >
+                      <Icon
+                        name="star"
+                        solid={estrella <= puntuacion}
+                        size={28}
+                        color="#FBC02D"
+                        style={{ marginHorizontal: 3 }}
+                      />
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
+              <TextInput
+                multiline
+                placeholder="Escribe tu comentario..."
+                placeholderTextColor="#999"
+                style={styles.inputComentario}
+                value={comentario}
+                onChange={(value) => setComentario(value)}
+              />
+
+              <View style={styles.buttonRow}>
+                <TouchableOpacity
+                  style={styles.cancelButton}
+                  onPress={() => setCerrarFormularioComentario()}
+                >
+                  <Text style={styles.cancelButtonText}>Cancelar</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.submitButton}
+                  //   onPress={this.publicarComentario}
+                >
+                  <Text style={styles.submitButtonText}>Publicar</Text>
+                </TouchableOpacity>
+              </View>
+            </KeyboardAvoidingView>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
+  );
 }
 
 class Mapa extends Component {
@@ -247,6 +390,10 @@ class Mapa extends Component {
     this.state = {
       puntoSeleccionado: null,
       seccionInfoDesplegada: false,
+      seccionComentariosDesplegada: false,
+      mostrarFormularioComentario: false,
+      comentario: "",
+      puntuacion: 3,
     };
   }
 
@@ -277,6 +424,7 @@ class Mapa extends Component {
     this.setState({
       puntoSeleccionado: punto,
       seccionInfoDesplegada: false,
+      seccionComentariosDesplegada: false,
     });
   }
 
@@ -284,11 +432,36 @@ class Mapa extends Component {
     this.setState({
       puntoSeleccionado: null,
       seccionInfoDesplegada: false,
+      seccionComentariosDesplegada: false,
     });
   }
 
   setSeccionInfoDesplegada(infoDesplegada) {
-    this.setState({ seccionInfoDesplegada: !infoDesplegada });
+    this.setState({ seccionInfoDesplegada: infoDesplegada });
+  }
+
+  setSeccionComentariosDesplegada(comentariosDesplegada) {
+    this.setState({ seccionComentariosDesplegada: comentariosDesplegada });
+  }
+
+  setMostrarFormularioComentario() {
+    this.setState({ mostrarFormularioComentario: true });
+  }
+
+  setCerrarFormularioComentario() {
+    this.setState({
+      mostrarFormularioComentario: false,
+      comentario: "",
+      puntuacion: 3,
+    });
+  }
+
+  setComentario(texto) {
+    this.setState({ comentario: texto });
+  }
+
+  setPuntuacion(puntuacion) {
+    this.setState({ puntuacion: puntuacion });
   }
 
   formatearCoordenadas(rutaSeleccionada) {
@@ -338,6 +511,7 @@ class Mapa extends Component {
             />
           ))}
         </MapView>
+
         <RenderPopUpFlotante
           puntoSeleccionado={this.state.puntoSeleccionado}
           cerrarPopup={() => this.cerrarPopup()}
@@ -345,6 +519,25 @@ class Mapa extends Component {
           setSeccionInfoDesplegada={(infoDesplegada) =>
             this.setSeccionInfoDesplegada(infoDesplegada)
           }
+          seccionComentariosDesplegada={this.state.seccionComentariosDesplegada}
+          setSeccionComentariosDesplegada={(comentariosDesplegada) =>
+            this.setSeccionComentariosDesplegada(comentariosDesplegada)
+          }
+          mostrarFormularioComentario={this.state.mostrarFormularioComentario}
+          setMostrarFormularioComentario={() =>
+            this.setMostrarFormularioComentario()
+          }
+        />
+
+        <ModalNuevoComentario
+          mostrarFormularioComentario={this.state.mostrarFormularioComentario}
+          setCerrarFormularioComentario={() =>
+            this.setCerrarFormularioComentario()
+          }
+          comentario={this.state.comentario}
+          setComentario={(texto) => this.setComentario(texto)}
+          puntuacion={this.state.puntuacion}
+          setPuntuacion={(puntuacion) => this.setPuntuacion(puntuacion)}
         />
       </SafeAreaView>
     );
@@ -405,9 +598,6 @@ const styles = StyleSheet.create({
   closeButton: {
     padding: 4,
     marginLeft: 10,
-  },
-  scrollMenuContainer: {
-    maxHeight: Dimensions.get("window").height * 0.4,
   },
   menuButton: {
     flexDirection: "row",
@@ -482,6 +672,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#edf0f4",
   },
+  comentariosScrollContainer: {
+    paddingHorizontal: 4,
+    paddingTop: 2,
+    paddingBottom: 10,
+    maxHeight: Dimensions.get("window").height * 0.5,
+  },
+
   commentAvatar: {
     width: 26,
     height: 26,
@@ -492,13 +689,13 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   commentLugar: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: "700",
     color: "#111111",
     marginBottom: 1,
   },
   commentTexto: {
-    fontSize: 12,
+    fontSize: 13,
     color: "#444444",
     marginBottom: 4,
     lineHeight: 15,
@@ -506,6 +703,116 @@ const styles = StyleSheet.create({
   commentMetaText: {
     fontSize: 11,
     color: "#777777",
+    alignSelf: "flex-end",
+    marginRight: 5,
+  },
+  comentarioEncabezado: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 2,
+  },
+  comentariosContainer: {
+    position: "relative",
+  },
+
+  fabButton: {
+    position: "absolute",
+    bottom: 15,
+    right: 15,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: colorHeader,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    width: "85%",
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 20,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    marginBottom: 15,
+  },
+
+  inputComentario: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 12,
+    padding: 12,
+    minHeight: 120,
+    textAlignVertical: "top",
+  },
+
+  botonEnviar: {
+    marginTop: 15,
+    backgroundColor: colorHeader,
+    padding: 14,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  cerrarModal: {
+    position: "absolute",
+    top: 15,
+    right: 15,
+    zIndex: 1,
+    padding: 5,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginVertical: 15,
+  },
+
+  cancelButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    marginRight: 10,
+  },
+
+  cancelButtonText: {
+    color: "#666",
+    fontWeight: "600",
+  },
+
+  submitButton: {
+    backgroundColor: colorHeader,
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    borderRadius: 10,
+  },
+
+  submitButtonText: {
+    color: "#fff",
+    fontWeight: "600",
+  },
+  ratingContainer: {
+    marginBottom: 20,
+  },
+  starsContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
   },
 });
 

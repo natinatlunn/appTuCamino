@@ -20,13 +20,14 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "softwareKeyboardLayoutMode": "resize"
     },
     "plugins": [
       [
         "expo-camera",
         {
-          "cameraPermission": "Permisos para usar la cámara", 
+          "cameraPermission": "Permisos para usar la cámara",
           "barcodeScannerEnabled": true
         }
       ]
@@ -36,4 +37,3 @@
     }
   }
 }
-
