@@ -12,18 +12,20 @@ import Mapa from "./MapaComponent";
 import Home from "./HomeComponent";
 import Perfil from "./PerfilComponent";
 import { connect } from "react-redux";
-import { fetchRutas } from "../redux/ActionCreators";
+import { fetchComentarios, fetchRutas } from "../redux/ActionCreators";
 
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
 
 const mapDispatchToProps = (dispatch) => ({
   fetchRutas: () => dispatch(fetchRutas()),
+  fetchComentarios: () => dispatch(fetchComentarios()),
 });
 
 class MenuBase extends Component {
   componentDidMount() {
     this.props.fetchRutas();
+    this.props.fetchComentarios();
   }
 
   menuHeaderOptions = (tite) => ({

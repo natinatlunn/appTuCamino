@@ -17,13 +17,26 @@ import {
 import { connect } from "react-redux";
 import Icon from "@expo/vector-icons/FontAwesome5";
 import { colorHeader } from "../comun/comun";
+import { postComentario } from "../redux/ActionCreators";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import "dayjs/locale/es";
+
+dayjs.extend(relativeTime);
+dayjs.locale("es");
 
 const mapStateToProps = (state) => {
   return {
     rutas: state.rutas,
+    comentarios: state.comentarios,
     auth: state.auth,
   };
 };
+
+const mapDispatchToProps = (dispatch) => ({
+  postComentario: (rutaId, puntoId, puntuacion, comentario) =>
+    dispatch(postComentario(rutaId, puntoId, puntuacion, comentario)),
+});
 
 function RenderPuntoCaracteristico({
   idPuntoSeleccionado,
@@ -62,14 +75,20 @@ function RenderPuntoCaracteristico({
 
 function RenderPopUpFlotante({
   puntoSeleccionado,
+  comentarios,
   cerrarPopup,
   seccionInfoDesplegada,
   setSeccionInfoDesplegada,
   seccionComentariosDesplegada,
   setSeccionComentariosDesplegada,
   setMostrarFormularioComentario,
+  usuarioLogueago,
 }) {
   if (!puntoSeleccionado) return null;
+
+  const comentariosFiltradosPorPunto = comentarios.filter(
+    (comentario) => comentario.puntoId === puntoSeleccionado.id,
+  );
 
   return (
     <View style={styles.floatingPopupContainer}>
@@ -91,11 +110,12 @@ function RenderPopUpFlotante({
       />
 
       <RenderComentariosPunto
-        puntoSeleccionado={puntoSeleccionado}
+        comentarios={comentariosFiltradosPorPunto}
         seccionComentariosDesplegada={seccionComentariosDesplegada}
         setSeccionComentariosDesplegada={setSeccionComentariosDesplegada}
         setSeccionInfoDesplegada={setSeccionInfoDesplegada}
         setMostrarFormularioComentario={setMostrarFormularioComentario}
+        usuarioLogueago={usuarioLogueago}
       />
     </View>
   );
@@ -162,54 +182,19 @@ function RenderInformacionPunto({
 }
 
 function RenderComentariosPunto({
-  puntoSeleccionado,
+  comentarios,
   seccionComentariosDesplegada,
   setSeccionComentariosDesplegada,
   setSeccionInfoDesplegada,
   setMostrarFormularioComentario,
+  usuarioLogueago,
 }) {
-  const comentarios = puntoSeleccionado.comentarios || [
-    {
-      id: 1,
-      lugar: "Albergue Jesús y María:",
-      texto: "¡Increíble lugar! Limpio y personal amable.",
-      autor: "Maria L.",
-      tiempo: "hace 2h",
-      puntuacion: 5,
-      icon: "user",
-      iconBg: "#2b5b84",
-    },
-    {
-      id: 2,
-      lugar: "Restaurante San Cernin:",
-      texto: "Menú del día muy rico y económico.",
-      autor: "Pablo S.",
-      tiempo: "hace 4h",
-      puntuacion: 4,
-      icon: "user",
-      iconBg: "#a0522d",
-    },
-    {
-      id: 3,
-      lugar: "Albergue Jesús y María:",
-      texto: "¡Increíble lugar! Limpio y personal amable.",
-      autor: "Maria L.",
-      tiempo: "hace 2h",
-      puntuacion: 5,
-      icon: "user",
-      iconBg: "#2b5b84",
-    },
-    {
-      id: 4,
-      lugar: "Restaurante San Cernin:",
-      texto: "Menú del día muy rico y económico.",
-      autor: "Pablo S.",
-      tiempo: "hace 4h",
-      puntuacion: 4,
-      icon: "user",
-      iconBg: "#a0522d",
-    },
-  ];
+  const obtenerTiempoRelativo = (fechaRaw) => {
+    if (!fechaRaw) return "";
+    const fecha = fechaRaw.toDate ? fechaRaw.toDate() : fechaRaw;
+    const fechaRelativa = dayjs(fecha).fromNow();
+    return fechaRelativa.charAt(0).toUpperCase() + fechaRelativa.slice(1);
+  };
 
   return (
     <>
@@ -253,10 +238,10 @@ function RenderComentariosPunto({
                   <View
                     style={[
                       styles.commentAvatar,
-                      { backgroundColor: comentario.iconBg },
+                      { backgroundColor: "#2b5b84" },
                     ]}
                   >
-                    <Icon name={comentario.icon} size={11} color="#ffffff" />
+                    <Icon name="user" size={11} color="#ffffff" />
                   </View>
                   <View style={{ flex: 1 }}>
                     <View style={styles.comentarioEncabezado}>
@@ -265,21 +250,33 @@ function RenderComentariosPunto({
                       </Text>
                       <RenderEstrellas puntuacion={comentario.puntuacion} />
                     </View>
-                    <Text style={styles.commentTexto}>{comentario.texto}</Text>
+                    <Text style={styles.commentTexto}>
+                      {comentario.comentario}
+                    </Text>
                     <Text style={styles.commentMetaText}>
-                      {comentario.tiempo}
+                      {obtenerTiempoRelativo(comentario.fecha)}
                     </Text>
                   </View>
                 </View>
               </View>
             )}
           />
-          <TouchableOpacity
-            style={styles.fabButton}
-            onPress={() => setMostrarFormularioComentario()}
-          >
-            <Icon name="plus" size={18} color="#fff" />
-          </TouchableOpacity>
+          {usuarioLogueago && (
+            <TouchableOpacity
+              style={styles.fabButton}
+              onPress={() => setMostrarFormularioComentario()}
+            >
+              <Icon
+                name="plus"
+                size={15}
+                color="#fff"
+                style={{ marginRight: 5 }}
+              />
+              <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>
+                Nuevo comentario
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       )}
     </>
@@ -310,6 +307,7 @@ function ModalNuevoComentario({
   setComentario,
   puntuacion,
   setPuntuacion,
+  publicarComentario,
 }) {
   return (
     <Modal
@@ -359,7 +357,7 @@ function ModalNuevoComentario({
                 placeholderTextColor="#999"
                 style={styles.inputComentario}
                 value={comentario}
-                onChange={(value) => setComentario(value)}
+                onChangeText={(value) => setComentario(value)}
               />
 
               <View style={styles.buttonRow}>
@@ -372,7 +370,7 @@ function ModalNuevoComentario({
 
                 <TouchableOpacity
                   style={styles.submitButton}
-                  //   onPress={this.publicarComentario}
+                  onPress={() => publicarComentario()}
                 >
                   <Text style={styles.submitButtonText}>Publicar</Text>
                 </TouchableOpacity>
@@ -465,6 +463,18 @@ class Mapa extends Component {
     this.setState({ puntuacion: puntuacion });
   }
 
+  publicarComentario() {
+    const idRuta = this.props.route.params?.rutaId;
+    const { puntuacion, comentario, puntoSeleccionado } = this.state;
+    this.props.postComentario(
+      idRuta,
+      puntoSeleccionado.id,
+      puntuacion,
+      comentario,
+    );
+    this.setCerrarFormularioComentario();
+  }
+
   formatearCoordenadas(rutaSeleccionada) {
     if (!rutaSeleccionada?.coordenadas?.length) return [];
 
@@ -481,7 +491,12 @@ class Mapa extends Component {
 
     const idPuntoSeleccionado = this.state.puntoSeleccionado?.id;
 
-    const usuario = this.props.auth.datosPerfil;
+    const comentarios = this.props.comentarios.comentarios;
+    const comentariosFiltrados = comentarios
+      ? comentarios.filter((comentario) => comentario.rutaId === idRuta)
+      : [];
+
+    const usuarioLogueago = !!this.props.auth?.user;
 
     return (
       <SafeAreaView style={styles.container}>
@@ -517,6 +532,7 @@ class Mapa extends Component {
 
         <RenderPopUpFlotante
           puntoSeleccionado={this.state.puntoSeleccionado}
+          comentarios={comentarios}
           cerrarPopup={() => this.cerrarPopup()}
           seccionInfoDesplegada={this.state.seccionInfoDesplegada}
           setSeccionInfoDesplegada={(infoDesplegada) =>
@@ -530,6 +546,7 @@ class Mapa extends Component {
           setMostrarFormularioComentario={() =>
             this.setMostrarFormularioComentario()
           }
+          usuarioLogueago={usuarioLogueago}
         />
 
         <ModalNuevoComentario
@@ -541,6 +558,7 @@ class Mapa extends Component {
           setComentario={(texto) => this.setComentario(texto)}
           puntuacion={this.state.puntuacion}
           setPuntuacion={(puntuacion) => this.setPuntuacion(puntuacion)}
+          publicarComentario={() => this.publicarComentario()}
         />
       </SafeAreaView>
     );
@@ -720,11 +738,8 @@ const styles = StyleSheet.create({
   },
 
   fabButton: {
-    position: "absolute",
-    bottom: 15,
-    right: 15,
-    width: 50,
-    height: 50,
+    width: 170,
+    height: 35,
     borderRadius: 25,
     backgroundColor: colorHeader,
     justifyContent: "center",
@@ -737,6 +752,8 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
+    alignSelf: "flex-end",
+    flexDirection: "row",
   },
   modalContainer: {
     flex: 1,
@@ -819,4 +836,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(mapStateToProps)(Mapa);
+export default connect(mapStateToProps, mapDispatchToProps)(Mapa);

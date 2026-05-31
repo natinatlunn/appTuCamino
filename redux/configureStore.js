@@ -9,7 +9,7 @@ export const ConfigureStore = () => {
     reducer: {
       rutas: rutasReducer,
       auth: userReducer,
-      // comentarios: comentariosReducer,
+      comentarios: comentariosReducer,
       scanner: scannerReducer,
     },
   });

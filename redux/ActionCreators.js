@@ -160,3 +160,93 @@ export const fetchUsuario = (uid) => (dispatch) => {
       console.error("Error al obtener datos del JSON:", error.message),
     );
 };
+
+export const fetchComentarios = () => (dispatch) => {
+  return fetch(baseUrl + "comentarios.json")
+    .then(
+      (response) => {
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error(
+            "Error " + response.status + ": " + response.statusText,
+          );
+          error.response = response;
+          throw error;
+        }
+      },
+      (error) => {
+        var errmess = new Error(error.message);
+        throw errmess;
+      },
+    )
+    .then((response) => response.json())
+    .then((comentarios) => {
+      const comentariosMapeado = comentarios
+        ? Object.keys(comentarios).map((idAleatorio) => {
+            return {
+              id: idAleatorio,
+              ...comentarios[idAleatorio],
+            };
+          })
+        : [];
+
+      dispatch(addComentarios(comentariosMapeado));
+    })
+    .catch((error) => dispatch(comentariosFailed(error.message)));
+};
+
+export const comentariosFailed = (errmess) => ({
+  type: ActionTypes.COMENTARIOS_FAILED,
+  payload: errmess,
+});
+
+export const addComentarios = (comentarios) => ({
+  type: ActionTypes.ADD_COMENTARIOS,
+  payload: comentarios,
+});
+
+export const postComentario =
+  (rutaId, puntoId, puntuacion, comentario) => async (dispatch, getState) => {
+    const fecha = new Date().toISOString();
+    const estadoAuth = getState().auth;
+    const autor = estadoAuth.datosPerfil.nombre;
+
+    const comentarioNuevo = {
+      rutaId,
+      puntoId,
+      puntuacion,
+      autor,
+      comentario,
+      fecha,
+    };
+
+    if (!auth.currentUser) {
+      throw new Error("No hay ningún usuario autenticado en Firebase");
+    }
+
+    const token = await auth.currentUser.getIdToken(true);
+
+    const url = `${baseUrl}comentarios.json?auth=${token}`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(comentarioNuevo),
+    });
+
+    if (response.ok) {
+      dispatch(addComentario(comentarioNuevo));
+    } else {
+      const errorData = await response.json();
+      throw new Error(
+        errorData.error || "Error al guardar el comentario en Firebase",
+      );
+    }
+  };
+
+export const addComentario = (comentarioNuevo) => ({
+  type: ActionTypes.ADD_COMENTARIO,
+  payload: comentarioNuevo,
+});
