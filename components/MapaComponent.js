@@ -1,24 +1,41 @@
 import { Component } from "react";
 import MapView, { PROVIDER_GOOGLE, Polyline, Marker } from "react-native-maps";
 import {
-  ActivityIndicator,
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
+  View,
   StyleSheet,
+  Dimensions,
   Text,
   TouchableOpacity,
-  View,
+  SafeAreaView,
+  FlatList,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Modal,
 } from "react-native";
 import { connect } from "react-redux";
 import Icon from "@expo/vector-icons/FontAwesome5";
-import { colorHeader, obtenerRutasNormalizadas } from "../comun/comun";
-import { addUserRouteMarker, getUserRouteMarkers } from "../comun/markersStorage";
-import { obtenerPuntosCaracteristicosRuta } from "../comun/puntosCaracteristicos";
+import { colorHeader } from "../comun/comun";
+import { postComentario } from "../redux/ActionCreators";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import "dayjs/locale/es";
 
-const mapStateToProps = (state) => ({
-  rutas: state.rutas,
-  auth: state.auth,
+dayjs.extend(relativeTime);
+dayjs.locale("es");
+
+const mapStateToProps = (state) => {
+  return {
+    rutas: state.rutas,
+    comentarios: state.comentarios,
+    auth: state.auth,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  postComentario: (rutaId, puntoId, puntuacion, comentario) =>
+    dispatch(postComentario(rutaId, puntoId, puntuacion, comentario)),
 });
 
 function RenderPuntoCaracteristico({
@@ -31,7 +48,7 @@ function RenderPuntoCaracteristico({
 
   return (
     <Marker
-      key={`caracteristico-${punto.id}`}
+      key={punto.id}
       coordinate={{
         latitude: punto.coordenadas.latitud,
         longitude: punto.coordenadas.longitud,
@@ -40,34 +57,67 @@ function RenderPuntoCaracteristico({
     >
       <View
         style={[
-          styles.characteristicMarker,
-          estaSeleccionado && styles.characteristicMarkerSelected,
+          styles.customMarker,
+          {
+            backgroundColor: estaSeleccionado ? colorHeader : "#ffffff",
+          },
         ]}
       >
         <Icon
           name={obtenerIconoPorPunto(punto.tipo)}
           size={14}
-          color="#ffffff"
+          color={estaSeleccionado ? "#ffffff" : colorHeader}
         />
       </View>
     </Marker>
   );
 }
 
-function RenderMarcadorUsuario({ marcador, onPress }) {
+function RenderPopUpFlotante({
+  puntoSeleccionado,
+  comentarios,
+  cerrarPopup,
+  seccionInfoDesplegada,
+  setSeccionInfoDesplegada,
+  seccionComentariosDesplegada,
+  setSeccionComentariosDesplegada,
+  setMostrarFormularioComentario,
+  usuarioLogueago,
+}) {
+  if (!puntoSeleccionado) return null;
+
+  const comentariosFiltradosPorPunto = comentarios.filter(
+    (comentario) => comentario.puntoId === puntoSeleccionado.id,
+  );
+
   return (
-    <Marker
-      key={marcador.id}
-      coordinate={{
-        latitude: marcador.latitude,
-        longitude: marcador.longitude,
-      }}
-      onPress={() => onPress(marcador)}
-    >
-      <View style={styles.userMarker}>
-        <Icon name="map-marker-alt" size={14} color="#ffffff" />
+    <View style={styles.floatingPopupContainer}>
+      <View style={styles.headerMenu}>
+        <View style={{ flex: 1, marginRight: 10 }}>
+          <Text style={styles.menuTitle}>{puntoSeleccionado.nombre}</Text>
+          <Text style={styles.menuSubtitle}>{puntoSeleccionado.tipo}</Text>
+        </View>
+        <TouchableOpacity onPress={cerrarPopup} style={styles.closeButton}>
+          <Icon name="times" size={16} color="#999999" />
+        </TouchableOpacity>
       </View>
-    </Marker>
+
+      <RenderInformacionPunto
+        puntoSeleccionado={puntoSeleccionado}
+        seccionInfoDesplegada={seccionInfoDesplegada}
+        setSeccionInfoDesplegada={setSeccionInfoDesplegada}
+        setSeccionComentariosDesplegada={setSeccionComentariosDesplegada}
+      />
+
+      <RenderComentariosPunto
+        comentarios={comentariosFiltradosPorPunto}
+        seccionComentariosDesplegada={seccionComentariosDesplegada}
+        setSeccionComentariosDesplegada={setSeccionComentariosDesplegada}
+        setSeccionInfoDesplegada={setSeccionInfoDesplegada}
+        setMostrarFormularioComentario={setMostrarFormularioComentario}
+        usuarioLogueago={usuarioLogueago}
+      />
+    </View>
   );
 }
 
@@ -75,12 +125,16 @@ function RenderInformacionPunto({
   puntoSeleccionado,
   seccionInfoDesplegada,
   setSeccionInfoDesplegada,
+  setSeccionComentariosDesplegada,
 }) {
   return (
     <>
       <TouchableOpacity
         style={styles.menuButton}
-        onPress={() => setSeccionInfoDesplegada(seccionInfoDesplegada)}
+        onPress={() => {
+          setSeccionInfoDesplegada(!seccionInfoDesplegada);
+          if (!seccionInfoDesplegada) setSeccionComentariosDesplegada(false);
+        }}
       >
         <Icon
           name="info-circle"
@@ -127,49 +181,205 @@ function RenderInformacionPunto({
   );
 }
 
-function RenderPopUpFlotante({
-  puntoSeleccionado,
-  cerrarPopup,
-  seccionInfoDesplegada,
+function RenderComentariosPunto({
+  comentarios,
+  seccionComentariosDesplegada,
+  setSeccionComentariosDesplegada,
   setSeccionInfoDesplegada,
-  mensajeMarcador,
-  instruccionesMarcador,
+  setMostrarFormularioComentario,
+  usuarioLogueago,
 }) {
-  if (!puntoSeleccionado) return null;
+  const obtenerTiempoRelativo = (fechaRaw) => {
+    if (!fechaRaw) return "";
+    const fecha = fechaRaw.toDate ? fechaRaw.toDate() : fechaRaw;
+    const fechaRelativa = dayjs(fecha).fromNow();
+    return fechaRelativa.charAt(0).toUpperCase() + fechaRelativa.slice(1);
+  };
 
   return (
-    <View style={styles.floatingPopupContainer}>
-      <View style={styles.headerMenu}>
-        <View style={{ flex: 1, marginRight: 10 }}>
-          <Text style={styles.menuTitle}>{puntoSeleccionado.nombre}</Text>
-          <Text style={styles.menuSubtitle}>{puntoSeleccionado.tipo}</Text>
-        </View>
-        <TouchableOpacity onPress={cerrarPopup} style={styles.closeButton}>
-          <Icon name="times" size={16} color="#999999" />
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={styles.scrollMenuContainer}
+    <>
+      <TouchableOpacity
+        style={[
+          styles.menuButton,
+          !seccionComentariosDesplegada && styles.lastButton,
+        ]}
+        onPress={() => {
+          setSeccionComentariosDesplegada(!seccionComentariosDesplegada);
+          if (!seccionComentariosDesplegada) setSeccionInfoDesplegada(false);
+        }}
       >
-        <RenderInformacionPunto
-          puntoSeleccionado={puntoSeleccionado}
-          seccionInfoDesplegada={seccionInfoDesplegada}
-          setSeccionInfoDesplegada={setSeccionInfoDesplegada}
+        <Icon
+          name="comment-alt"
+          size={16}
+          color="#111111"
+          style={styles.buttonIcon}
         />
-
-        <View style={styles.markerActionSection}>
-          {!!mensajeMarcador && (
-            <Text style={styles.markerFeedbackText}>{mensajeMarcador}</Text>
-          )}
-
-          {!!instruccionesMarcador && (
-            <Text style={styles.markerHintText}>{instruccionesMarcador}</Text>
+        <Text style={styles.menuButtonText}>
+          Opiniones y reseñas ({comentarios.length})
+        </Text>
+        <Icon
+          name={seccionComentariosDesplegada ? "chevron-up" : "chevron-down"}
+          size={14}
+          color="#666666"
+          style={styles.chevronIcon}
+        />
+      </TouchableOpacity>
+      {seccionComentariosDesplegada && (
+        <View style={styles.comentariosContainer}>
+          <FlatList
+            data={comentarios}
+            keyExtractor={(item) => item.id.toString()}
+            showsVerticalScrollIndicator={true}
+            renderItem={({ item: comentario }) => (
+              <View style={styles.commentCard}>
+                <View
+                  style={{ flexDirection: "row", alignItems: "flex-start" }}
+                >
+                  <View
+                    style={[
+                      styles.commentAvatar,
+                      { backgroundColor: "#2b5b84" },
+                    ]}
+                  >
+                    <Icon name="user" size={11} color="#ffffff" />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <View style={styles.comentarioEncabezado}>
+                      <Text style={styles.commentLugar}>
+                        {comentario.autor}
+                      </Text>
+                      <RenderEstrellas puntuacion={comentario.puntuacion} />
+                    </View>
+                    <Text style={styles.commentTexto}>
+                      {comentario.comentario}
+                    </Text>
+                    <Text style={styles.commentMetaText}>
+                      {obtenerTiempoRelativo(comentario.fecha)}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            )}
+          />
+          {usuarioLogueago && (
+            <TouchableOpacity
+              style={styles.fabButton}
+              onPress={() => setMostrarFormularioComentario()}
+            >
+              <Icon
+                name="plus"
+                size={15}
+                color="#fff"
+                style={{ marginRight: 5 }}
+              />
+              <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>
+                Nuevo comentario
+              </Text>
+            </TouchableOpacity>
           )}
         </View>
-      </ScrollView>
-    </View>
+      )}
+    </>
+  );
+}
+
+function RenderEstrellas({ puntuacion }) {
+  const stars = [];
+  for (let i = 1; i <= 5; i++) {
+    stars.push(
+      <Icon
+        key={i}
+        name="star"
+        solid={i <= puntuacion}
+        size={10}
+        color="#FBC02D"
+        style={{ marginRight: 1 }}
+      />,
+    );
+  }
+  return <View style={{ flexDirection: "row", marginRight: 4 }}>{stars}</View>;
+}
+
+function ModalNuevoComentario({
+  mostrarFormularioComentario,
+  setCerrarFormularioComentario,
+  comentario,
+  setComentario,
+  puntuacion,
+  setPuntuacion,
+  publicarComentario,
+}) {
+  return (
+    <Modal
+      visible={mostrarFormularioComentario}
+      transparent
+      animationType="fade"
+      onRequestClose={() => setCerrarFormularioComentario()}
+    >
+      <TouchableWithoutFeedback onPress={() => setCerrarFormularioComentario()}>
+        <View style={styles.modalContainer}>
+          <TouchableWithoutFeedback>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              style={styles.modalContent}
+            >
+              <TouchableOpacity
+                style={styles.cerrarModal}
+                onPress={() => setCerrarFormularioComentario()}
+              >
+                <Icon name="times" size={18} color="#666" />
+              </TouchableOpacity>
+
+              <Text style={styles.modalTitle}>Añadir comentario</Text>
+
+              <View style={styles.ratingContainer}>
+                <View style={styles.starsContainer}>
+                  {[1, 2, 3, 4, 5].map((estrella) => (
+                    <TouchableOpacity
+                      key={estrella}
+                      onPress={() => setPuntuacion(estrella)}
+                    >
+                      <Icon
+                        name="star"
+                        solid={estrella <= puntuacion}
+                        size={28}
+                        color="#FBC02D"
+                        style={{ marginHorizontal: 3 }}
+                      />
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
+              <TextInput
+                multiline
+                placeholder="Escribe tu comentario..."
+                placeholderTextColor="#999"
+                style={styles.inputComentario}
+                value={comentario}
+                onChangeText={(value) => setComentario(value)}
+              />
+
+              <View style={styles.buttonRow}>
+                <TouchableOpacity
+                  style={styles.cancelButton}
+                  onPress={() => setCerrarFormularioComentario()}
+                >
+                  <Text style={styles.cancelButtonText}>Cancelar</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.submitButton}
+                  onPress={() => publicarComentario()}
+                >
+                  <Text style={styles.submitButtonText}>Publicar</Text>
+                </TouchableOpacity>
+              </View>
+            </KeyboardAvoidingView>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
   );
 }
 
@@ -179,89 +389,10 @@ class Mapa extends Component {
     this.state = {
       puntoSeleccionado: null,
       seccionInfoDesplegada: false,
-      marcadoresUsuario: [],
-      loadingMarcadores: false,
-      mensajeMarcador: "",
-    };
-
-    this.cargarMarcadoresUsuario = this.cargarMarcadoresUsuario.bind(this);
-    this.obtenerRouteKey = this.obtenerRouteKey.bind(this);
-    this.obtenerRutaSeleccionada = this.obtenerRutaSeleccionada.bind(this);
-    this.obtenerCoordenadasRuta = this.obtenerCoordenadasRuta.bind(this);
-    this.obtenerRegionInicial = this.obtenerRegionInicial.bind(this);
-    this.obtenerIconoPorPunto = this.obtenerIconoPorPunto.bind(this);
-    this.handleClicarPunto = this.handleClicarPunto.bind(this);
-    this.handleClicarMarcadorUsuario = this.handleClicarMarcadorUsuario.bind(this);
-    this.cerrarPopup = this.cerrarPopup.bind(this);
-    this.setSeccionInfoDesplegada = this.setSeccionInfoDesplegada.bind(this);
-    this.handleLongPressMapa = this.handleLongPressMapa.bind(this);
-  }
-
-  componentDidMount() {
-    this.cargarMarcadoresUsuario();
-  }
-
-  componentDidUpdate(prevProps) {
-    const routeKeyAnterior = this.obtenerRouteKey(prevProps);
-    const routeKeyActual = this.obtenerRouteKey(this.props);
-    const uidAnterior = prevProps.auth?.user?.uid;
-    const uidActual = this.props.auth?.user?.uid;
-
-    if (routeKeyAnterior !== routeKeyActual || uidAnterior !== uidActual) {
-      this.cargarMarcadoresUsuario();
-    }
-  }
-
-  obtenerRouteKey(props = this.props) {
-    return props.route?.params?.rutaKey || props.route?.params?.rutaId || null;
-  }
-
-  obtenerRutaSeleccionada(props = this.props) {
-    const rutasNormalizadas = obtenerRutasNormalizadas(props.rutas?.rutas || []);
-    const routeKey = this.obtenerRouteKey(props);
-
-    return (
-      rutasNormalizadas.find((ruta) => ruta.key === routeKey) ||
-      rutasNormalizadas[0] ||
-      null
-    );
-  }
-
-  obtenerCoordenadasRuta(rutaSeleccionada) {
-    if (!rutaSeleccionada?.coordinates?.length) {
-      return [];
-    }
-
-    return rutaSeleccionada.coordinates.map((punto) => ({
-      latitude: punto[1],
-      longitude: punto[0],
-    }));
-  }
-
-  
-
-  obtenerRegionInicial(coordenadasRuta) {
-    if (!coordenadasRuta.length) {
-      return {
-        latitude: 42.466,
-        longitude: -2.445,
-        latitudeDelta: 5,
-        longitudeDelta: 5,
-      };
-    }
-
-    const latitudes = coordenadasRuta.map((punto) => punto.latitude);
-    const longitudes = coordenadasRuta.map((punto) => punto.longitude);
-    const minLat = Math.min(...latitudes);
-    const maxLat = Math.max(...latitudes);
-    const minLon = Math.min(...longitudes);
-    const maxLon = Math.max(...longitudes);
-
-    return {
-      latitude: (minLat + maxLat) / 2,
-      longitude: (minLon + maxLon) / 2,
-      latitudeDelta: Math.max((maxLat - minLat) * 1.4, 0.6),
-      longitudeDelta: Math.max((maxLon - minLon) * 1.4, 0.6),
+      seccionComentariosDesplegada: false,
+      mostrarFormularioComentario: false,
+      comentario: "",
+      puntuacion: 3,
     };
   }
 
@@ -284,29 +415,6 @@ class Mapa extends Component {
     }
   }
 
-  async cargarMarcadoresUsuario() {
-    const uid = this.props.auth?.user?.uid;
-    const routeKey = this.obtenerRouteKey();
-
-    if (!uid || !routeKey) {
-      this.setState({
-        marcadoresUsuario: [],
-        loadingMarcadores: false,
-        mensajeMarcador: "",
-      });
-      return;
-    }
-
-    this.setState({ loadingMarcadores: true, mensajeMarcador: "" });
-
-    try {
-      const marcadoresUsuario = await getUserRouteMarkers(uid, routeKey);
-      this.setState({ marcadoresUsuario });
-    } finally {
-      this.setState({ loadingMarcadores: false });
-    }
-  }
-
   handleClicarPunto(e, punto) {
     if (e && e.stopPropagation) {
       e.stopPropagation();
@@ -315,36 +423,7 @@ class Mapa extends Component {
     this.setState({
       puntoSeleccionado: punto,
       seccionInfoDesplegada: false,
-      mensajeMarcador: "",
-    });
-  }
-
-  handleClicarMarcadorUsuario(marcador) {
-    const routeKey = this.obtenerRouteKey();
-    const puntosCaracteristicos = obtenerPuntosCaracteristicosRuta(routeKey);
-    const puntoRelacionado = marcador.pointId
-      ? puntosCaracteristicos.find((punto) => punto.id === marcador.pointId)
-      : {
-          id: marcador.id,
-          nombre: marcador.name || "Marcador personal",
-          descripcion: "Marcador creado por ti sobre la ruta.",
-          direccion: `Lat ${Number(marcador.latitude).toFixed(5)}, Lon ${Number(
-            marcador.longitude,
-          ).toFixed(5)}`,
-          coordenadas: {
-            latitud: marcador.latitude,
-            longitud: marcador.longitude,
-          },
-        };
-
-    if (!puntoRelacionado) {
-      return;
-    }
-
-    this.setState({
-      puntoSeleccionado: puntoRelacionado,
-      seccionInfoDesplegada: true,
-      mensajeMarcador: "",
+      seccionComentariosDesplegada: false,
     });
   }
 
@@ -352,77 +431,85 @@ class Mapa extends Component {
     this.setState({
       puntoSeleccionado: null,
       seccionInfoDesplegada: false,
-      mensajeMarcador: "",
+      seccionComentariosDesplegada: false,
     });
   }
 
   setSeccionInfoDesplegada(infoDesplegada) {
-    this.setState({ seccionInfoDesplegada: !infoDesplegada });
+    this.setState({ seccionInfoDesplegada: infoDesplegada });
   }
 
-  
+  setSeccionComentariosDesplegada(comentariosDesplegada) {
+    this.setState({ seccionComentariosDesplegada: comentariosDesplegada });
+  }
 
-  async handleLongPressMapa(e) {
-    const usuario = this.props.auth?.user;
-    const routeKey = this.obtenerRouteKey();
-    if (!usuario || !routeKey) {
-      this.setState({ mensajeMarcador: "Inicia sesión para crear marcadores." });
-      return;
-    }
+  setMostrarFormularioComentario() {
+    this.setState({ mostrarFormularioComentario: true });
+  }
 
-    const coordenadaPulsada = e?.nativeEvent?.coordinate;
-    if (!coordenadaPulsada) {
-      return;
-    }
-
-    const nuevoMarcador = {
-      id: `${usuario.uid}-${routeKey}-${Date.now()}`,
-      routeKey,
-      latitude: coordenadaPulsada.latitude,
-      longitude: coordenadaPulsada.longitude,
-      createdAt: new Date().toISOString(),
-      source: "user",
-      color: "orange",
-    };
-
-    const marcadoresUsuario = await addUserRouteMarker(
-      usuario.uid,
-      routeKey,
-      nuevoMarcador,
-    );
-
+  setCerrarFormularioComentario() {
     this.setState({
-      marcadoresUsuario,
-      mensajeMarcador: "Marcador creado sobre la ruta.",
-      puntoSeleccionado: null,
-      seccionInfoDesplegada: false,
+      mostrarFormularioComentario: false,
+      comentario: "",
+      puntuacion: 3,
     });
   }
 
+  setComentario(texto) {
+    this.setState({ comentario: texto });
+  }
+
+  setPuntuacion(puntuacion) {
+    this.setState({ puntuacion: puntuacion });
+  }
+
+  publicarComentario() {
+    const idRuta = this.props.route.params?.rutaId;
+    const { puntuacion, comentario, puntoSeleccionado } = this.state;
+    this.props.postComentario(
+      idRuta,
+      puntoSeleccionado.id,
+      puntuacion,
+      comentario,
+    );
+    this.setCerrarFormularioComentario();
+  }
+
+  formatearCoordenadas(rutaSeleccionada) {
+    if (!rutaSeleccionada?.coordenadas?.length) return [];
+
+    return rutaSeleccionada.coordenadas.map((punto) => ({
+      latitude: punto[1],
+      longitude: punto[0],
+    }));
+  }
+
   render() {
-    const rutaSeleccionada = this.obtenerRutaSeleccionada();
-    const routeKey = this.obtenerRouteKey();
-    const rutaCoordenadas = this.obtenerCoordenadasRuta(rutaSeleccionada);
-    const puntosCaracteristicos =
-      rutaSeleccionada?.puntosCaracteristicos?.length
-        ? rutaSeleccionada.puntosCaracteristicos
-        : obtenerPuntosCaracteristicosRuta(routeKey);
-    const marcadoresVisibles = this.state.marcadoresUsuario || [];
+    const idRuta = this.props.route.params?.rutaId;
+    const rutaSeleccionada = this.props.rutas.rutas[idRuta];
+    const rutaCoordenadas = this.formatearCoordenadas(rutaSeleccionada);
+
     const idPuntoSeleccionado = this.state.puntoSeleccionado?.id;
-    const puedeCrearMarcador = !!this.props.auth?.user;
-    const instruccionesMarcador = puedeCrearMarcador
-      ? "Mantén pulsado sobre cualquier punto de la ruta para crear tu marcador."
-      : "Inicia sesión para crear marcadores personales.";
+
+    const comentarios = this.props.comentarios.comentarios;
+    const comentariosFiltrados = comentarios
+      ? comentarios.filter((comentario) => comentario.rutaId === idRuta)
+      : [];
+
+    const usuarioLogueago = !!this.props.auth?.user;
 
     return (
       <SafeAreaView style={styles.container}>
         <MapView
-          key={routeKey || "mapa-base"}
           provider={PROVIDER_GOOGLE}
           style={styles.map}
-          initialRegion={this.obtenerRegionInicial(rutaCoordenadas)}
-          onPress={this.cerrarPopup}
-          onLongPress={this.handleLongPressMapa}
+          // initialRegion={{
+          //   latitude: 42.466,
+          //   longitude: -2.445,
+          //   latitudeDelta: 5,
+          //   longitudeDelta: 5,
+          // }}
+          onPress={() => this.cerrarPopup}
         >
           {rutaCoordenadas.length > 0 && (
             <Polyline
@@ -432,39 +519,46 @@ class Mapa extends Component {
             />
           )}
 
-          {puntosCaracteristicos.map((punto) => (
+          {rutaSeleccionada?.puntosCaracteristicos?.map((punto) => (
             <RenderPuntoCaracteristico
-              key={`caracteristico-${punto.id}`}
+              key={punto.id}
               idPuntoSeleccionado={idPuntoSeleccionado}
               punto={punto}
-              handleClicarPunto={(e, puntoActual) => this.handleClicarPunto(e, puntoActual)}
+              handleClicarPunto={(e, punto) => this.handleClicarPunto(e, punto)}
               obtenerIconoPorPunto={(tipo) => this.obtenerIconoPorPunto(tipo)}
-            />
-          ))}
-
-          {marcadoresVisibles.map((marcador) => (
-            <RenderMarcadorUsuario
-              key={marcador.id}
-              marcador={marcador}
-              onPress={(marker) => this.handleClicarMarcadorUsuario(marker)}
             />
           ))}
         </MapView>
 
-        {this.state.loadingMarcadores && (
-          <View style={styles.loadingOverlay}>
-            <ActivityIndicator size="small" color={colorHeader} />
-            <Text style={styles.loadingOverlayText}>Cargando marcadores...</Text>
-          </View>
-        )}
-
         <RenderPopUpFlotante
           puntoSeleccionado={this.state.puntoSeleccionado}
-          cerrarPopup={this.cerrarPopup}
+          comentarios={comentarios}
+          cerrarPopup={() => this.cerrarPopup()}
           seccionInfoDesplegada={this.state.seccionInfoDesplegada}
-          setSeccionInfoDesplegada={this.setSeccionInfoDesplegada}
-          mensajeMarcador={this.state.mensajeMarcador}
-          instruccionesMarcador={instruccionesMarcador}
+          setSeccionInfoDesplegada={(infoDesplegada) =>
+            this.setSeccionInfoDesplegada(infoDesplegada)
+          }
+          seccionComentariosDesplegada={this.state.seccionComentariosDesplegada}
+          setSeccionComentariosDesplegada={(comentariosDesplegada) =>
+            this.setSeccionComentariosDesplegada(comentariosDesplegada)
+          }
+          mostrarFormularioComentario={this.state.mostrarFormularioComentario}
+          setMostrarFormularioComentario={() =>
+            this.setMostrarFormularioComentario()
+          }
+          usuarioLogueago={usuarioLogueago}
+        />
+
+        <ModalNuevoComentario
+          mostrarFormularioComentario={this.state.mostrarFormularioComentario}
+          setCerrarFormularioComentario={() =>
+            this.setCerrarFormularioComentario()
+          }
+          comentario={this.state.comentario}
+          setComentario={(texto) => this.setComentario(texto)}
+          puntuacion={this.state.puntuacion}
+          setPuntuacion={(puntuacion) => this.setPuntuacion(puntuacion)}
+          publicarComentario={() => this.publicarComentario()}
         />
       </SafeAreaView>
     );
@@ -479,25 +573,10 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
   },
-  characteristicMarker: {
-    backgroundColor: colorHeader,
+  customMarker: {
+    backgroundColor: "#ffffff",
     borderWidth: 1.5,
-    borderColor: "#d18f00",
-    borderRadius: 15,
-    width: 28,
-    height: 28,
-    justifyContent: "center",
-    alignItems: "center",
-    elevation: 5,
-  },
-  characteristicMarkerSelected: {
-    borderColor: "#9a6700",
-    borderWidth: 2,
-  },
-  userMarker: {
-    backgroundColor: "#f97316",
-    borderWidth: 1.5,
-    borderColor: "#c2410c",
+    borderColor: colorHeader,
     borderRadius: 15,
     width: 28,
     height: 28,
@@ -541,9 +620,6 @@ const styles = StyleSheet.create({
     padding: 4,
     marginLeft: 10,
   },
-  scrollMenuContainer: {
-    maxHeight: Dimensions.get("window").height * 0.42,
-  },
   menuButton: {
     flexDirection: "row",
     alignItems: "center",
@@ -552,6 +628,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     borderRadius: 12,
     marginBottom: 8,
+  },
+  lastButton: {
+    marginBottom: 0,
   },
   buttonIcon: {
     marginRight: 12,
@@ -567,6 +646,7 @@ const styles = StyleSheet.create({
   chevronIcon: {
     marginLeft: 4,
   },
+
   acordeonContent: {
     paddingHorizontal: 4,
     paddingTop: 2,
@@ -605,59 +685,155 @@ const styles = StyleSheet.create({
     lineHeight: 17,
     textAlign: "justify",
   },
-  markerActionSection: {
+  commentCard: {
+    backgroundColor: "#ffffff",
+    borderRadius: 14,
+    padding: 12,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: "#edf0f4",
+  },
+  comentariosScrollContainer: {
     paddingHorizontal: 4,
     paddingTop: 2,
-    paddingBottom: 4,
+    paddingBottom: 10,
+    maxHeight: Dimensions.get("window").height * 0.5,
   },
-  markerActionButton: {
-    flexDirection: "row",
+
+  commentAvatar: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f97316",
-    paddingVertical: 12,
-    paddingHorizontal: 14,
-    borderRadius: 12,
-    marginTop: 4,
+    marginRight: 10,
+    marginTop: 2,
   },
-  markerActionButtonDisabled: {
-    backgroundColor: "#f0f0f0",
-  },
-  markerActionButtonText: {
+  commentLugar: {
     fontSize: 14,
     fontWeight: "700",
-    color: "#ffffff",
-    flex: 1,
+    color: "#111111",
+    marginBottom: 1,
   },
-  markerActionButtonTextDisabled: {
-    color: "#8f8f8f",
-  },
-  markerFeedbackText: {
-    marginTop: 8,
-    fontSize: 12,
-    color: "#666666",
-  },
-  markerHintText: {
-    marginTop: 6,
-    fontSize: 11,
-    color: "#8a5a00",
-  },
-  loadingOverlay: {
-    position: "absolute",
-    top: 16,
-    alignSelf: "center",
-    backgroundColor: "rgba(255,255,255,0.92)",
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 999,
-    flexDirection: "row",
-    alignItems: "center",
-    elevation: 4,
-  },
-  loadingOverlayText: {
-    marginLeft: 8,
-    fontSize: 12,
+  commentTexto: {
+    fontSize: 13,
     color: "#444444",
+    marginBottom: 4,
+    lineHeight: 15,
+  },
+  commentMetaText: {
+    fontSize: 11,
+    color: "#777777",
+    alignSelf: "flex-end",
+    marginRight: 5,
+  },
+  comentarioEncabezado: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 2,
+  },
+  comentariosContainer: {
+    position: "relative",
+  },
+
+  fabButton: {
+    width: 170,
+    height: 35,
+    borderRadius: 25,
+    backgroundColor: colorHeader,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    alignSelf: "flex-end",
+    flexDirection: "row",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    width: "85%",
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 20,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    marginBottom: 15,
+  },
+
+  inputComentario: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 12,
+    padding: 12,
+    minHeight: 120,
+    textAlignVertical: "top",
+  },
+
+  botonEnviar: {
+    marginTop: 15,
+    backgroundColor: colorHeader,
+    padding: 14,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  cerrarModal: {
+    position: "absolute",
+    top: 15,
+    right: 15,
+    zIndex: 1,
+    padding: 5,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginVertical: 15,
+  },
+
+  cancelButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    marginRight: 10,
+  },
+
+  cancelButtonText: {
+    color: "#666",
+    fontWeight: "600",
+  },
+
+  submitButton: {
+    backgroundColor: colorHeader,
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    borderRadius: 10,
+  },
+
+  submitButtonText: {
+    color: "#fff",
+    fontWeight: "600",
+  },
+  ratingContainer: {
+    marginBottom: 20,
+  },
+  starsContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
   },
 });
 
-export default connect(mapStateToProps)(Mapa);
+export default connect(mapStateToProps, mapDispatchToProps)(Mapa);

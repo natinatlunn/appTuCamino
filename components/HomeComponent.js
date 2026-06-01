@@ -65,18 +65,18 @@ class Home extends Component {
 
     const { navigate } = this.props.navigation;
 
-    navigate("Mapa", { screen: "Mapa", params: { rutaKey: ruta.key } });
+    navigate("Mapa", { screen: "Mapa", params: { rutaId: ruta.id } });
   };
 
   render() {
-    const rutas = obtenerRutasNormalizadas(this.props.rutas?.rutas || []);
+    const rutas = this.props.rutas?.rutas || [];
     const user = this.props.auth?.user;
 
     return (
       <View style={styles.container}>
         <FlatList
           data={rutas}
-          keyExtractor={(item) => item.key}
+          keyExtractor={(item) => item.id}
           ListHeaderComponent={<TarjetaBienvenida user={user} />}
           contentContainerStyle={styles.listContent}
           renderItem={({ item }) => (
