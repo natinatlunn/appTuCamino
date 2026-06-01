@@ -17,6 +17,7 @@ import {
 import { connect } from "react-redux";
 import Icon from "@expo/vector-icons/FontAwesome5";
 import { colorHeader } from "../comun/comun";
+import { addUserRouteMarker, getUserRouteMarkers } from "../comun/markersStorage";
 import { postComentario } from "../redux/ActionCreators";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -68,6 +69,23 @@ function RenderPuntoCaracteristico({
           size={14}
           color={estaSeleccionado ? "#ffffff" : colorHeader}
         />
+      </View>
+    </Marker>
+  );
+}
+
+function RenderMarcadorUsuario({ marcador, onPress }) {
+  return (
+    <Marker
+      key={marcador.id}
+      coordinate={{
+        latitude: marcador.latitude,
+        longitude: marcador.longitude,
+      }}
+      onPress={() => onPress(marcador)}
+    >
+      <View style={styles.userMarker}>
+        <Icon name="map-marker-alt" size={14} color="#ffffff" />
       </View>
     </Marker>
   );
@@ -393,7 +411,40 @@ class Mapa extends Component {
       mostrarFormularioComentario: false,
       comentario: "",
       puntuacion: 3,
+      marcadoresUsuario: [],
     };
+
+    this.cargarMarcadoresUsuario = this.cargarMarcadoresUsuario.bind(this);
+    this.handleLongPressMapa = this.handleLongPressMapa.bind(this);
+    this.handleClicarMarcadorUsuario = this.handleClicarMarcadorUsuario.bind(this);
+  }
+
+  componentDidMount() {
+    this.cargarMarcadoresUsuario();
+  }
+
+  componentDidUpdate(prevProps) {
+    const routeIdAnterior = prevProps.route.params?.rutaId;
+    const routeIdActual = this.props.route.params?.rutaId;
+    const uidAnterior = prevProps.auth?.user?.uid;
+    const uidActual = this.props.auth?.user?.uid;
+
+    if (routeIdAnterior !== routeIdActual || uidAnterior !== uidActual) {
+      this.cargarMarcadoresUsuario();
+    }
+  }
+
+  async cargarMarcadoresUsuario() {
+    const uid = this.props.auth?.user?.uid;
+    const routeId = this.props.route.params?.rutaId;
+
+    if (!uid || routeId === undefined || routeId === null) {
+      this.setState({ marcadoresUsuario: [] });
+      return;
+    }
+
+    const marcadoresUsuario = await getUserRouteMarkers(uid, String(routeId));
+    this.setState({ marcadoresUsuario });
   }
 
   obtenerIconoPorPunto(tipo) {
@@ -425,6 +476,47 @@ class Mapa extends Component {
       seccionInfoDesplegada: false,
       seccionComentariosDesplegada: false,
     });
+  }
+
+  handleClicarMarcadorUsuario(marcador) {
+    this.setState({
+      puntoSeleccionado: {
+        id: marcador.id,
+        nombre: marcador.nombre || "Marcador personal",
+        tipo: "Marcador personal",
+        descripcion: marcador.descripcion || "Marcador creado por el usuario.",
+        direccion:
+          marcador.direccion ||
+          `Lat ${Number(marcador.latitude).toFixed(5)}, Lon ${Number(marcador.longitude).toFixed(5)}`,
+      },
+      seccionInfoDesplegada: true,
+      seccionComentariosDesplegada: false,
+    });
+  }
+
+  async handleLongPressMapa(e) {
+    const uid = this.props.auth?.user?.uid;
+    const routeId = this.props.route.params?.rutaId;
+    const coordinate = e?.nativeEvent?.coordinate;
+
+    if (!uid || routeId === undefined || routeId === null || !coordinate) {
+      return;
+    }
+
+    const nuevoMarcador = {
+      id: `${uid}-${routeId}-${Date.now()}`,
+      latitude: coordinate.latitude,
+      longitude: coordinate.longitude,
+      createdAt: new Date().toISOString(),
+    };
+
+    const marcadoresUsuario = await addUserRouteMarker(
+      uid,
+      String(routeId),
+      nuevoMarcador,
+    );
+
+    this.setState({ marcadoresUsuario });
   }
 
   cerrarPopup() {
@@ -490,6 +582,8 @@ class Mapa extends Component {
     const rutaCoordenadas = this.formatearCoordenadas(rutaSeleccionada);
 
     const idPuntoSeleccionado = this.state.puntoSeleccionado?.id;
+    const routeIdString = String(idRuta);
+    const marcadoresUsuario = this.state.marcadoresUsuario || [];
 
     const comentarios = this.props.comentarios.comentarios;
     const comentariosFiltrados = comentarios
@@ -509,7 +603,8 @@ class Mapa extends Component {
           //   latitudeDelta: 5,
           //   longitudeDelta: 5,
           // }}
-          onPress={() => this.cerrarPopup}
+          onPress={() => this.cerrarPopup()}
+          onLongPress={(e) => this.handleLongPressMapa(e)}
         >
           {rutaCoordenadas.length > 0 && (
             <Polyline
@@ -526,6 +621,14 @@ class Mapa extends Component {
               punto={punto}
               handleClicarPunto={(e, punto) => this.handleClicarPunto(e, punto)}
               obtenerIconoPorPunto={(tipo) => this.obtenerIconoPorPunto(tipo)}
+            />
+          ))}
+
+          {marcadoresUsuario.map((marcador) => (
+            <RenderMarcadorUsuario
+              key={marcador.id}
+              marcador={marcador}
+              onPress={(marker) => this.handleClicarMarcadorUsuario(marker)}
             />
           ))}
         </MapView>
@@ -577,6 +680,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     borderWidth: 1.5,
     borderColor: colorHeader,
+    borderRadius: 15,
+    width: 28,
+    height: 28,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+  },
+  userMarker: {
+    backgroundColor: "#f97316",
+    borderWidth: 1.5,
+    borderColor: "#c2410c",
     borderRadius: 15,
     width: 28,
     height: 28,
