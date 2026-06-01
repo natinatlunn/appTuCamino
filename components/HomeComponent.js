@@ -12,7 +12,7 @@ import Icon from "@expo/vector-icons/FontAwesome5";
 import { colorHeader, obtenerRutasNormalizadas } from "../comun/comun";
 import { Card, Text, IconButton, Surface } from "react-native-paper";
 
-function TarjetaBienvenida({ user }) {
+function TarjetaBienvenida({ user, datosPerfil }) {
   return (
     <View style={styles.bienvenidaCard}>
       <Image
@@ -20,14 +20,15 @@ function TarjetaBienvenida({ user }) {
         style={styles.bienvenidaImage}
         resizeMode="contain"
       />
-      <Text style={styles.bienvenidaTitle}>Tu Camino</Text>
       {user && (
-        <Text style={styles.welcomeUser}>
-          {`Bienvenido ${user.displayName || (user.email || "").split("@")[0]}`}
-        </Text>
+        <Text
+          style={styles.bienvenidaTitle}
+        >{`¡Bienvenido ${datosPerfil.nombre}!`}</Text>
       )}
+
       <Text style={styles.bienvenidaText}>
-        Elige una ruta del Camino de Santiago y se mostrará en el mapa.
+        Elige una ruta del Camino de Santiago y disfruta de una experiencia
+        única.
       </Text>
     </View>
   );
@@ -114,6 +115,7 @@ class Home extends Component {
   render() {
     const { rutas, isLoading } = this.props.rutas;
     const user = this.props.auth?.user;
+    const datosPerfil = this.props.auth?.datosPerfil;
 
     return (
       <View style={styles.container}>
@@ -126,7 +128,9 @@ class Home extends Component {
           <FlatList
             data={rutas}
             keyExtractor={(item) => item.id}
-            ListHeaderComponent={<TarjetaBienvenida user={user} />}
+            ListHeaderComponent={
+              <TarjetaBienvenida user={user} datosPerfil={datosPerfil} />
+            }
             contentContainerStyle={styles.listContent}
             renderItem={({ item }) => (
               <TarjetaRuta
@@ -169,7 +173,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   bienvenidaTitle: {
-    fontSize: 28,
+    fontSize: 23,
     fontWeight: "800",
     color: "#1f1a14",
     marginBottom: 8,
