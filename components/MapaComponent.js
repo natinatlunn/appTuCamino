@@ -82,7 +82,7 @@ function RenderMarcadorUsuario({ marcador, onPress }) {
         latitude: marcador.latitude,
         longitude: marcador.longitude,
       }}
-      onPress={() => onPress(marcador)}
+      onPress={(e) => onPress(e, marcador)}
     >
       <View style={styles.userMarker}>
         <Icon name="map-marker-alt" size={14} color="#ffffff" />
@@ -478,7 +478,11 @@ class Mapa extends Component {
     });
   }
 
-  handleClicarMarcadorUsuario(marcador) {
+  handleClicarMarcadorUsuario(e, marcador) {
+    if (e && e.stopPropagation) {
+      e.stopPropagation();
+    }
+
     this.setState({
       puntoSeleccionado: {
         id: marcador.id,
@@ -628,7 +632,7 @@ class Mapa extends Component {
             <RenderMarcadorUsuario
               key={marcador.id}
               marcador={marcador}
-              onPress={(marker) => this.handleClicarMarcadorUsuario(marker)}
+              onPress={(e, marker) => this.handleClicarMarcadorUsuario(e, marker)}
             />
           ))}
         </MapView>
