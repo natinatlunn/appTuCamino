@@ -12,7 +12,7 @@ import Icon from "@expo/vector-icons/FontAwesome5";
 import { colorHeader, obtenerRutasNormalizadas } from "../comun/comun";
 import { Card, Text, IconButton, Surface } from "react-native-paper";
 
-function TarjetaBienvenida({ user, datosPerfil }) {
+function TarjetaBienvenida({ datosPerfil }) {
   return (
     <View style={styles.bienvenidaCard}>
       <Image
@@ -20,7 +20,7 @@ function TarjetaBienvenida({ user, datosPerfil }) {
         style={styles.bienvenidaImage}
         resizeMode="contain"
       />
-      {user && (
+      {datosPerfil && (
         <Text
           style={styles.bienvenidaTitle}
         >{`¡Bienvenido ${datosPerfil.nombre}!`}</Text>
@@ -114,7 +114,6 @@ class Home extends Component {
 
   render() {
     const { rutas, isLoading } = this.props.rutas;
-    const user = this.props.auth?.user;
     const datosPerfil = this.props.auth?.datosPerfil;
 
     return (
@@ -129,7 +128,7 @@ class Home extends Component {
             data={rutas}
             keyExtractor={(item) => item.id}
             ListHeaderComponent={
-              <TarjetaBienvenida user={user} datosPerfil={datosPerfil} />
+              <TarjetaBienvenida datosPerfil={datosPerfil} />
             }
             contentContainerStyle={styles.listContent}
             renderItem={({ item }) => (
