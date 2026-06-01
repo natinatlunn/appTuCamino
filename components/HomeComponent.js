@@ -1,15 +1,16 @@
 import { Component } from "react";
 import {
   View,
-  Text,
   Image,
   StyleSheet,
   TouchableOpacity,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import { connect } from "react-redux";
 import Icon from "@expo/vector-icons/FontAwesome5";
 import { colorHeader, obtenerRutasNormalizadas } from "../comun/comun";
+import { Card, Text, IconButton, Surface } from "react-native-paper";
 
 function TarjetaBienvenida({ user }) {
   return (
@@ -34,21 +35,63 @@ function TarjetaBienvenida({ user }) {
 
 function TarjetaRuta({ ruta, onPress }) {
   return (
-    <TouchableOpacity
-      style={styles.routeCard}
+    <Card
+      mode="elevated"
+      style={[
+        styles.card,
+        {
+          borderLeftWidth: 5,
+          borderLeftColor: colorHeader,
+        },
+      ]}
       onPress={onPress}
-      activeOpacity={0.9}
     >
-      <View style={styles.routeCardHeader}>
-        <View style={styles.routeCardIconWrap}>
-          <Icon name="route" size={16} color="#ffffff" />
+      <Card.Content>
+        <View style={styles.header}>
+          <View style={styles.routeCardIconWrap}>
+            <Icon name="route" size={16} color="#ffffff" />
+          </View>
+
+          <View style={styles.titleContainer}>
+            <Text variant="titleMedium" style={styles.nombre} numberOfLines={1}>
+              {ruta.nombre}
+            </Text>
+
+            <Text
+              variant="bodySmall"
+              style={styles.recorrido}
+              numberOfLines={2}
+            >
+              {ruta.lugarInicio} → {ruta.lugarFin}
+            </Text>
+          </View>
+
+          <IconButton icon="chevron-right" size={22} />
         </View>
-        <View style={{ flex: 1 }}>
-          <Text style={styles.routeTitle}>{ruta.nombre}</Text>
-          <Text style={styles.routeSubtitle}>Toca para abrirla en el mapa</Text>
+
+        <View style={styles.divider} />
+
+        <View style={styles.statsContainer}>
+          <Surface style={styles.statCard} elevation={0}>
+            <Text variant="headlineSmall" style={styles.statValue}>
+              {ruta.distancia}
+            </Text>
+            <Text variant="labelMedium">km</Text>
+          </Surface>
+          <Surface style={styles.statCard} elevation={0}>
+            <Text style={styles.statValueDificultad}>
+              Dificultad {ruta.dificultad}
+            </Text>
+          </Surface>
+          <Surface style={styles.statCard} elevation={0}>
+            <Text variant="headlineSmall" style={styles.statValue}>
+              {ruta.etapas}
+            </Text>
+            <Text variant="labelMedium">Etapas</Text>
+          </Surface>
         </View>
-      </View>
-    </TouchableOpacity>
+      </Card.Content>
+    </Card>
   );
 }
 
@@ -69,30 +112,31 @@ class Home extends Component {
   };
 
   render() {
-    const rutas = this.props.rutas?.rutas || [];
+    const { rutas, isLoading } = this.props.rutas;
     const user = this.props.auth?.user;
 
     return (
       <View style={styles.container}>
-        <FlatList
-          data={rutas}
-          keyExtractor={(item) => item.id}
-          ListHeaderComponent={<TarjetaBienvenida user={user} />}
-          contentContainerStyle={styles.listContent}
-          renderItem={({ item }) => (
-            <TarjetaRuta
-              ruta={item}
-              onPress={() => this.seleccionarYRendirRuta(item)}
-            />
-          )}
-          // ListEmptyComponent={
-          //   <View style={styles.emptyState}>
-          //     <Text style={styles.emptyTitle}>Cargando rutas</Text>
-          //     <Text style={styles.emptyText}></Text>
-          //   </View>
-          // }
-          showsVerticalScrollIndicator={false}
-        />
+        {isLoading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={colorHeader} />
+            <Text style={styles.loadingText}>Cargando rutas...</Text>
+          </View>
+        ) : (
+          <FlatList
+            data={rutas}
+            keyExtractor={(item) => item.id}
+            ListHeaderComponent={<TarjetaBienvenida user={user} />}
+            contentContainerStyle={styles.listContent}
+            renderItem={({ item }) => (
+              <TarjetaRuta
+                ruta={item}
+                onPress={() => this.seleccionarYRendirRuta(item)}
+              />
+            )}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
       </View>
     );
   }
@@ -155,10 +199,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     elevation: 3,
   },
-  routeCardHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
   routeCardIconWrap: {
     width: 38,
     height: 38,
@@ -167,16 +207,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
-  },
-  routeTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: "#1f1a14",
-  },
-  routeSubtitle: {
-    marginTop: 3,
-    fontSize: 13,
-    color: "#6b6258",
   },
   emptyState: {
     backgroundColor: "#ffffff",
@@ -193,6 +223,75 @@ const styles = StyleSheet.create({
   emptyText: {
     textAlign: "center",
     color: "#6b6258",
+  },
+  card: {
+    marginVertical: 8,
+    borderRadius: 16,
+    overflow: "hidden",
+    backgroundColor: "#ffffff",
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 8 },
+  },
+
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  titleContainer: {
+    flex: 1,
+    marginLeft: 12,
+  },
+
+  nombre: {
+    fontWeight: "700",
+  },
+
+  recorrido: {
+    marginTop: 4,
+    opacity: 0.7,
+  },
+
+  divider: {
+    height: 1,
+    backgroundColor: "#ECECEC",
+    marginVertical: 16,
+  },
+
+  statsContainer: {
+    flexDirection: "row",
+    gap: 12,
+  },
+
+  statCard: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#F7F7F7",
+  },
+
+  statValue: {
+    fontWeight: "700",
+  },
+  statValueDificultad: {
+    fontSize: 16,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: "#f7f3ea",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  loadingText: {
+    marginTop: 14,
+    color: "#6b6258",
+    fontSize: 15,
   },
 });
 

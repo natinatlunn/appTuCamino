@@ -4,6 +4,8 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../comun/firebaseConfig";
 
 export const fetchRutas = () => (dispatch) => {
+  dispatch(rutasLoading());
+
   return fetch(baseUrl + "rutas.json")
     .then(
       (response) => {
@@ -35,6 +37,10 @@ export const rutasFailed = (errmess) => ({
 export const addRutas = (rutas) => ({
   type: ActionTypes.ADD_RUTAS,
   payload: rutas,
+});
+
+export const rutasLoading = () => ({
+  type: ActionTypes.RUTAS_LOADING,
 });
 
 export const setScanned = (value) => ({
