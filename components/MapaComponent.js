@@ -498,7 +498,6 @@ class Mapa extends Component {
     this.setState({
       puntoSeleccionado: {
         id: marcador.id,
-        markerId: marcador.id,
         nombre: marcador.nombre || "Marcador personal",
         tipo: "Marcador personal",
         descripcion: marcador.descripcion || "Marcador creado por el usuario.",
@@ -540,7 +539,7 @@ class Mapa extends Component {
   async eliminarMarcadorUsuario() {
     const uid = this.props.auth?.user?.uid;
     const routeId = this.props.route.params?.rutaId;
-    const markerId = this.state.puntoSeleccionado?.markerId;
+    const markerId = this.state.puntoSeleccionado?.id;
 
     if (!uid || routeId === undefined || routeId === null || !markerId) {
       return;
