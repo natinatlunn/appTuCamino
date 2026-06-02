@@ -1,21 +1,12 @@
-import { CameraView, useCameraPermissions } from "expo-camera";
-import * as Haptics from "expo-haptics";
-import {
-  ActivityIndicator,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import { connect } from "react-redux";
-import InfoQrComponent from "./InfoQrComponent";
-import {
-  fetchQRInfo,
-  setModalVisible,
-  setQrData,
-  setScanned,
-} from "../redux/ActionCreators";
-import { colorHeader } from "../comun/comun";
+import { CameraView, useCameraPermissions } from 'expo-camera';
+import * as Haptics from 'expo-haptics';
+import { useIsFocused } from '@react-navigation/native';
+import { useState } from 'react';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import { connect } from 'react-redux';
+import InfoQrComponent from './InfoQrComponent';
+import { fetchQRInfo, setModalVisible, setQrData, setScanned } from '../redux/ActionCreators';
+import { colorHeader } from '../comun/comun';
 
 function CameraScanner({
   onClose,
@@ -28,6 +19,10 @@ function CameraScanner({
   fetchQRInfo,
 }) {
   const [permission, requestPermission] = useCameraPermissions();
+  const isFocused = useIsFocused();
+  const [cameraEnabled, setCameraEnabled] = useState(true);
+
+  const cameraIsActive = !!permission?.granted && isFocused && cameraEnabled;
 
   if (!permission) {
     return (
@@ -69,27 +64,44 @@ function CameraScanner({
     setScanned(false);
   };
 
+  const handleCloseCamera = () => {
+    setCameraEnabled(false);
+    handleCloseModal();
+    onClose?.();
+  };
+
+  const handleActivateCamera = () => {
+    setScanned(false);
+    setCameraEnabled(true);
+  };
+
   return (
     <View style={styles.container}>
-      <CameraView
-        style={StyleSheet.absoluteFillObject}
-        facing="back"
-        barcodeScannerSettings={{ barcodeTypes: ["qr"] }}
-        onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
-      />
+      {cameraIsActive ? (
+        <CameraView
+          style={StyleSheet.absoluteFillObject}
+          facing="back"
+          barcodeScannerSettings={{ barcodeTypes: ['qr'] }}
+          onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
+        />
+      ) : (
+        <View style={StyleSheet.absoluteFillObject} />
+      )}
 
       <View style={styles.overlay}>
-        <Text style={styles.title}>Centra el código QR</Text>
+        <Text style={styles.title}>
+          {cameraIsActive ? 'Centra el código QR' : 'Cámara desactivada'}
+        </Text>
 
-        <Pressable
-          style={styles.actionButton}
-          onPress={() => {
-            setScanned(false);
-            onClose?.();
-          }}
-        >
-          <Text style={styles.actionText}>Cerrar cámara</Text>
-        </Pressable>
+        {cameraIsActive ? (
+          <Pressable style={styles.actionButton} onPress={handleCloseCamera}>
+            <Text style={styles.actionText}>Cerrar cámara</Text>
+          </Pressable>
+        ) : (
+          <Pressable style={styles.actionButton} onPress={handleActivateCamera}>
+            <Text style={styles.actionText}>Activar cámara</Text>
+          </Pressable>
+        )}
       </View>
 
       <InfoQrComponent
