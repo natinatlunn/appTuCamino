@@ -637,12 +637,6 @@ class Mapa extends Component {
         <MapView
           provider={PROVIDER_GOOGLE}
           style={styles.map}
-          // initialRegion={{
-          //   latitude: 42.466,
-          //   longitude: -2.445,
-          //   latitudeDelta: 5,
-          //   longitudeDelta: 5,
-          // }}
           onPress={() => this.cerrarPopup()}
           onLongPress={(e) => this.handleLongPressMapa(e)}
         >
