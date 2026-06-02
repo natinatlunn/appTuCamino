@@ -39,3 +39,11 @@ export const addUserRouteMarker = async (uid, routeKey, marker) => {
   await saveUserRouteMarkers(uid, routeKey, nextMarkers);
   return nextMarkers;
 };
+
+export const removeUserRouteMarker = async (uid, routeKey, markerId) => {
+  const currentMarkers = await getUserRouteMarkers(uid, routeKey);
+  const nextMarkers = currentMarkers.filter((marker) => marker.id !== markerId);
+
+  await saveUserRouteMarkers(uid, routeKey, nextMarkers);
+  return nextMarkers;
+};

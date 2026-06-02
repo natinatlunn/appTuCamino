@@ -17,7 +17,11 @@ import {
 import { connect } from "react-redux";
 import Icon from "@expo/vector-icons/FontAwesome5";
 import { colorHeader } from "../comun/comun";
-import { addUserRouteMarker, getUserRouteMarkers } from "../comun/markersStorage";
+import {
+  addUserRouteMarker,
+  getUserRouteMarkers,
+  removeUserRouteMarker,
+} from "../comun/markersStorage";
 import { postComentario } from "../redux/ActionCreators";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -95,6 +99,7 @@ function RenderPopUpFlotante({
   puntoSeleccionado,
   comentarios,
   cerrarPopup,
+  eliminarMarcador,
   seccionInfoDesplegada,
   setSeccionInfoDesplegada,
   seccionComentariosDesplegada,
@@ -135,6 +140,13 @@ function RenderPopUpFlotante({
         setMostrarFormularioComentario={setMostrarFormularioComentario}
         usuarioLogueago={usuarioLogueago}
       />
+
+      {puntoSeleccionado.esMarcadorUsuario && (
+        <TouchableOpacity style={styles.deleteButton} onPress={eliminarMarcador}>
+          <Icon name="trash-alt" size={14} color="#b42318" style={styles.buttonIcon} />
+          <Text style={styles.deleteButtonText}>Eliminar marcador</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -486,12 +498,14 @@ class Mapa extends Component {
     this.setState({
       puntoSeleccionado: {
         id: marcador.id,
+        markerId: marcador.id,
         nombre: marcador.nombre || "Marcador personal",
         tipo: "Marcador personal",
         descripcion: marcador.descripcion || "Marcador creado por el usuario.",
         direccion:
           marcador.direccion ||
           `Lat ${Number(marcador.latitude).toFixed(5)}, Lon ${Number(marcador.longitude).toFixed(5)}`,
+        esMarcadorUsuario: true,
       },
       seccionInfoDesplegada: true,
       seccionComentariosDesplegada: false,
@@ -521,6 +535,29 @@ class Mapa extends Component {
     );
 
     this.setState({ marcadoresUsuario });
+  }
+
+  async eliminarMarcadorUsuario() {
+    const uid = this.props.auth?.user?.uid;
+    const routeId = this.props.route.params?.rutaId;
+    const markerId = this.state.puntoSeleccionado?.markerId;
+
+    if (!uid || routeId === undefined || routeId === null || !markerId) {
+      return;
+    }
+
+    const marcadoresUsuario = await removeUserRouteMarker(
+      uid,
+      String(routeId),
+      markerId,
+    );
+
+    this.setState({
+      marcadoresUsuario,
+      puntoSeleccionado: null,
+      seccionInfoDesplegada: false,
+      seccionComentariosDesplegada: false,
+    });
   }
 
   cerrarPopup() {
@@ -649,6 +686,7 @@ class Mapa extends Component {
           setSeccionComentariosDesplegada={(comentariosDesplegada) =>
             this.setSeccionComentariosDesplegada(comentariosDesplegada)
           }
+          eliminarMarcador={() => this.eliminarMarcadorUsuario()}
           mostrarFormularioComentario={this.state.mostrarFormularioComentario}
           setMostrarFormularioComentario={() =>
             this.setMostrarFormularioComentario()
@@ -737,6 +775,24 @@ const styles = StyleSheet.create({
   closeButton: {
     padding: 4,
     marginLeft: 10,
+  },
+  deleteButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-start",
+    backgroundColor: "#fef3f2",
+    borderWidth: 1,
+    borderColor: "#fecdca",
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    borderRadius: 12,
+    marginTop: 12,
+    marginBottom: 10,
+  },
+  deleteButtonText: {
+    color: "#b42318",
+    fontWeight: "700",
+    fontSize: 14,
   },
   menuButton: {
     flexDirection: "row",
